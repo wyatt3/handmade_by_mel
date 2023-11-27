@@ -16,6 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->string('name');
             $table->decimal('price_modifier', 8, 2);
+            $table->boolean('active')->default(true);
             $table->bigInteger('product_id')->unsigned();
             $table->foreign('product_id')->references('id')->on('products')->cascadeOnDelete();
             $table->bigInteger('product_variation_type_id')->unsigned();
