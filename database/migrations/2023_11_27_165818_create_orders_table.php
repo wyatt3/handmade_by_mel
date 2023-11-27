@@ -16,7 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->decimal('total', 10, 2);
             $table->bigInteger('status_id')->unsigned();
-            $table->foreign('status_id')->references('id')->on('order_statuses')->nullOnDelete();
+            $table->foreign('status_id')->references('id')->on('order_statuses');
             $table->bigInteger('customer_id')->unsigned();
             $table->foreign('customer_id')->references('id')->on('customers')->cascadeOnDelete();
         });
