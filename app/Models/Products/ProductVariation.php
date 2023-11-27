@@ -11,9 +11,7 @@ class ProductVariation extends Model
 
     protected $fillable = [
         'name',
-        'price',
-        'sku',
-        'parent_sku',
+        'price_modifier',
         'active',
         'product_id',
         'product_variation_type_id',
@@ -27,10 +25,5 @@ class ProductVariation extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
-    }
-
-    public function inventory()
-    {
-        return $this->hasOne(Inventory::class, 'sku', 'sku');
     }
 }

@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Models\Inventory;
+namespace App\Models\Orders;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Inventory extends Model
+class OrderStatus extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'sku',
-        'quantity',
+        'name',
     ];
 }

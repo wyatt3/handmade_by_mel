@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('sku')->unique()->index('sku');
             $table->boolean('active')->default(true);
             $table->bigInteger('product_category_id')->unsigned();
-            $table->foreign('product_category_id')->references('id')->on('product_categories');
+            $table->foreign('product_category_id')->references('id')->on('product_categories')->nullOnDelete();
             $table->timestamps();
         });
     }

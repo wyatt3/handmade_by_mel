@@ -27,9 +27,4 @@ class Product extends Model
     {
         return $this->belongsTo(ProductCategory::class, 'product_category_id');
     }
-
-    public function inventory()
-    {
-        return $this->hasOne(Inventory::class, 'sku', 'sku');
-    }
 }

@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('inventory', function (Blueprint $table) {
+        Schema::create('order_statuses', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('sku')->unique()->index('sku');
-            $table->integer('quantity');
+            $table->string('name');
         });
     }
 
@@ -24,8 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('inventory', function (Blueprint $table) {
-            $table->dropIndex('sku');
-        });
+        Schema::dropIfExists('order_statuses');
     }
 };
