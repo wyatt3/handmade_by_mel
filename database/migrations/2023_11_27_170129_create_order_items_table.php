@@ -14,10 +14,13 @@ return new class extends Migration
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->decimal('price', 10, 2);
             $table->integer('quantity');
+            $table->decimal('base_price', 10, 2);
+            $table->decimal('total', 10, 2);
             $table->bigInteger('order_id')->unsigned();
             $table->foreign('order_id')->references('id')->on('orders')->cascadeOnDelete();
+            $table->bigInteger('product_id')->unsigned();
+            $table->foreign('product_id')->references('id')->on('products');
         });
     }
 
@@ -28,6 +31,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('order_items', function (Blueprint $table) {
             $table->dropForeign(['order_id']);
+            $table->dropForeign(['product_id']);
         });
     }
 };
