@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -14,14 +16,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-})->name('home');
-
-
 Route::domain('admin.' . env('APP_URL'))->group(function () {
-    Auth::routes(['register' => false, 'password.request' => false, 'password.reset' => false, 'password.update' => false, 'password.confirm' => false, 'email.verification' => false, 'email.verification.notice' => false]);
-    Route::get('/', function () {
-        return view('index');
-    })->name('admin.home');
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login']);
+    Route::middleware('auth')->group(function () {
+        Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+        Route::get('/', [Controller::class, 'adminIndex'])->name('admin.home');
+    });
 });
+
+Route::get('/', [Controller::class, 'index'])->name('home');
