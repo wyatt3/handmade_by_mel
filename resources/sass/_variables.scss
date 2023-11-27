@@ -1,0 +1,29 @@
+// Body
+$body-bg: #f8fafc;
+
+// scss-docs-start theme-color-variables
+$primary:       #70C1B3 !default;
+$secondary:     #95B2B8 !default;
+$tertiary:      #FFE570 !default;
+$success:       #A4CB49 !default;
+$warning:       #FFC43D !default;
+$danger:        #EF476F !default;
+$light:         #D5D4D4 !default;
+$dark:          #222E50 !default;
+// scss-docs-end theme-color-variables
+
+$theme-colors: (
+    "primary":    $primary,
+    "secondary":  $secondary,
+    "tertiary":   $tertiary,
+    "success":    $success,
+    "warning":    $warning,
+    "danger":     $danger,
+    "light":      $light,
+    "dark":       $dark
+);
+
+// Typography
+$font-family-sans-serif: 'Nunito', sans-serif;
+$font-size-base: 0.9rem;
+$line-height-base: 1.6;
