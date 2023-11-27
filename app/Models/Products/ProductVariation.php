@@ -18,4 +18,19 @@ class ProductVariation extends Model
         'product_id',
         'product_variation_type_id',
     ];
+
+    public function type()
+    {
+        return $this->belongsTo(ProductVariationType::class, 'product_variation_type_id');
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    public function inventory()
+    {
+        return $this->hasOne(Inventory::class, 'sku', 'sku');
+    }
 }

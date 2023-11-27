@@ -17,4 +17,19 @@ class Product extends Model
         'active',
         'product_category_id',
     ];
+
+    public function variations()
+    {
+        return $this->hasMany(ProductVariation::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(ProductCategory::class, 'product_category_id');
+    }
+
+    public function inventory()
+    {
+        return $this->hasOne(Inventory::class, 'sku', 'sku');
+    }
 }
