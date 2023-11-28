@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ListingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,6 +24,8 @@ Route::domain('admin.' . env('APP_URL'))->group(function () {
         Route::get('/', [Controller::class, 'adminIndex'])->name('admin.home');
     });
 });
+
+Route::get('listings/{listing}', [ListingController::class, 'show'])->name('listing.show');
 
 Route::get('/', [Controller::class, 'index'])->name('home');
 Route::get('/about', [Controller::class, 'about'])->name('about');

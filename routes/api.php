@@ -15,10 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('listings')->group(function () {
-    Route::get('/', [ListingController::class, 'getActiveListings']);
-    Route::get('/{listing}', 'ListingController@show');
-});
+Route::get('/listings', [ListingController::class, 'getActiveListings']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
