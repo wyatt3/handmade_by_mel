@@ -2,7 +2,7 @@
   <div
     class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"
   >
-    <div class="col mb-5">
+    <div class="col mb-5" v-for="listing in listings" :key="listing.id">
       <div class="card h-100">
         <!-- Product image-->
         <img
@@ -14,7 +14,7 @@
         <div class="card-body p-4">
           <div class="text-center">
             <!-- Product name-->
-            <h5 class="fw-bolder">Fancy Product</h5>
+            <h5 class="fw-bolder">{{ listing.name }}</h5>
             <!-- Product price-->
             $40.00 - $80.00
           </div>
@@ -33,7 +33,25 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      listings: [],
+      options: {
+        offset: 0,
+        limit: 10,
+        category_id: null,
+        search: "",
+      },
+    };
+  },
+  methods: {
+    getListings() {
+      axios.get("/api/listings", { params: this.options }).then((response) => {
+        this.listings = response.data;
+      });
+    },
+  },
+  created() {
+    this.getListings();
   },
 };
 </script>

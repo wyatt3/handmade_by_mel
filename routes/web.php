@@ -26,3 +26,4 @@ Route::domain('admin.' . env('APP_URL'))->group(function () {
 });
 
 Route::get('/', [Controller::class, 'index'])->name('home');
+Route::get('/about', [Controller::class, 'about'])->name('about');
