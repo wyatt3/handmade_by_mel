@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->decimal('price', 8, 2);
+            $table->decimal('sale_price', 8, 2)->nullable();
             $table->string('sku')->unique()->index('sku');
             $table->boolean('active')->default(true);
             $table->bigInteger('product_category_id')->unsigned();

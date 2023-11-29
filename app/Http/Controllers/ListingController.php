@@ -29,7 +29,7 @@ class ListingController extends Controller
         $product = Product::where('name', $listing)->firstOrFail();
 
         return view('listing', [
-            'product' => $product,
+            'product' => $product->loadMissing('category', 'variations'),
         ]);
     }
 }
