@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\GetListingsRequest;
 use App\Models\Products\Product;
 use App\Services\ProductService;
+use Illuminate\Support\Collection;
 
 class ListingController extends Controller
 {
@@ -28,8 +29,23 @@ class ListingController extends Controller
     {
         $product = Product::where('name', $listing)->firstOrFail();
 
+        /** @var Collection $related */
+        $related = $product->category->products()
+            ->where('id', '!=', $product->id)
+            ->limit(4)
+            ->get();
+
+        if ($related->count() < 4) {
+            $related = $related->merge(Product::where('id', '!=', $product->id)
+                ->where('product_category_id', '!=', $product->product_category_id)
+                ->where('active', true)
+                ->limit(4 - $related->count())
+                ->get());
+        }
+
         return view('listing', [
             'product' => $product->loadMissing('category', 'variations'),
+            'related' => $related,
         ]);
     }
 }
