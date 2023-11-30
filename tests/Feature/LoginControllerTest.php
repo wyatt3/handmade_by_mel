@@ -24,11 +24,24 @@ class LoginControllerTest extends TestCase
         $response->assertRedirect(route('home'));
     }
 
+    public function testAuthenticatedUserGetsRedirected()
+    {
+        $response = $this->actingAs($this->user)->get(route('login'));
+
+        $response->assertRedirect(route('home'));
+    }
+
     public function testUnauthenticatedUserGetsRedirected()
     {
         $response = $this->get(route('admin.home'));
 
-        dd(route('admin.home'));
         $response->assertRedirect(route('login'));
+    }
+
+    public function testAdminIndex()
+    {
+        $response = $this->actingAs($this->user)->get(route('admin.home'));
+
+        $response->assertStatus(200);
     }
 }
