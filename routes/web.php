@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ListingController;
 use Illuminate\Support\Facades\Route;
@@ -25,7 +26,10 @@ Route::domain('admin.' . env('APP_URL'))->group(function () {
     });
 });
 
-Route::get('listings/{listing}', [ListingController::class, 'show'])->name('listing.show');
-
 Route::get('/', [Controller::class, 'index'])->name('home');
 Route::get('/about', [Controller::class, 'about'])->name('about');
+
+Route::get('listings/{listing}', [ListingController::class, 'show'])->name('listing.show');
+
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::get('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');

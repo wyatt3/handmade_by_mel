@@ -25,12 +25,12 @@
         :key="variationType"
       >
         <label class="form-label" v-text="variationType"></label>
-        <select class="form-select">
+        <select class="form-select" v-model="variations[variationType]">
           <option
             v-for="variation in variations"
             :key="variation.id"
             v-text="variation.name"
-            :value="variation.id"
+            :value="variation"
           ></option>
         </select>
       </div>
@@ -55,6 +55,11 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  data() {
+    return {
+      variations: [],
+    };
   },
   methods: {
     addToCart() {

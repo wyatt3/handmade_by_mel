@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Hash;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -18,6 +19,9 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        $this->user = User::factory()->create();
+        $this->user = User::factory()->create([
+            'email' => $email = $this->faker->email,
+            'password' => Hash::make($email)
+        ]);
     }
 }
