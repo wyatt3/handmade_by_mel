@@ -16,7 +16,13 @@ class ListingController extends Controller
         $this->productService = $productService;
     }
 
-    public function getActiveListings(GetListingsRequest $request)
+    /**
+     * get a list of active listings
+     *
+     * @param GetListingsRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getActiveListings(GetListingsRequest $request): \Illuminate\Http\JsonResponse
     {
         $request->validated();
 
@@ -42,7 +48,7 @@ class ListingController extends Controller
             ->where('name', $listing)
             ->firstOrFail();
 
-        $product->variations = $product->variations->groupBy('type.name')->sortKeys();
+        $product->groupedVariations = $product->variations->groupBy('type.name')->sortKeys();
 
         /** @var Collection<Product> $related */
         $related = $product->category->products()

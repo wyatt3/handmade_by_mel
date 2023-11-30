@@ -7,8 +7,8 @@
       />
     </div>
     <div class="col-md-6">
-      <div class="small mb-1" v-text="'SKU:' + product.sku"></div>
-      <h1 class="display-5 fw-bolder" v-text="product.name"></h1>
+      <h1 class="display-5 fw-bolder mb-0" v-text="product.name"></h1>
+      <div class="small mb-2" v-text="'SKU:' + product.sku"></div>
       <div class="fs-5 mb-3">
         <div v-if="product.sale_price">
           <span
@@ -20,13 +20,26 @@
         <div v-else v-text="'$' + product.price"></div>
       </div>
       <p class="lead" v-text="product.description"></p>
+      <div
+        v-for="(variations, variationType) in product.groupedVariations"
+        :key="variationType"
+      >
+        <label class="form-label" v-text="variationType"></label>
+        <select class="form-select">
+          <option
+            v-for="variation in variations"
+            :key="variation.id"
+            v-text="variation.name"
+            :value="variation.id"
+          ></option>
+        </select>
+      </div>
       <div class="d-flex">
         <button class="btn btn-outline-dark flex-shrink-0" type="button">
           <i class="bi-cart-fill me-1"></i>
           Add to cart
         </button>
       </div>
-      <div v-for="variationType in product.variations"></div>
     </div>
   </div>
 </template>
