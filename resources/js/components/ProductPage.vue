@@ -35,7 +35,11 @@
         </select>
       </div>
       <div class="d-flex">
-        <button class="btn btn-outline-dark flex-shrink-0" type="button">
+        <button
+          class="btn btn-outline-dark flex-shrink-0"
+          type="button"
+          @click="addToCart"
+        >
           <i class="bi-cart-fill me-1"></i>
           Add to cart
         </button>
@@ -52,8 +56,10 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {};
+  methods: {
+    addToCart() {
+      this.$store.commit("addToCart", this.product);
+    },
   },
 };
 </script>
