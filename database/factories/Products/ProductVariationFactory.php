@@ -22,6 +22,7 @@ class ProductVariationFactory extends Factory
             'name' => $this->faker->word(),
             'price_modifier' => $this->faker->randomFloat(2, 1, 10),
             'active' => $this->faker->boolean(),
+            'order' => $this->faker->numberBetween(1, 10),
             'product_id' => Product::factory(),
             'product_variation_type_id' => ProductVariationType::factory(),
         ];

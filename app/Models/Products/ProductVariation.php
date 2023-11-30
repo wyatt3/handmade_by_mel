@@ -13,6 +13,7 @@ class ProductVariation extends Model
         'name',
         'price_modifier',
         'active',
+        'order',
         'product_id',
         'product_variation_type_id',
     ];

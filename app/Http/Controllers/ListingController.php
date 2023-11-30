@@ -25,11 +25,26 @@ class ListingController extends Controller
         return response()->json($listings);
     }
 
-    public function show($listing)
+    /**
+     * show a listing
+     *
+     * @param string $listing
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function show(string $listing): \Illuminate\Contracts\View\View
     {
-        $product = Product::where('name', $listing)->firstOrFail();
+        /** @var Product $product */
+        $product = Product::with([
+            'variations' => function ($query) {
+                $query->where('active', true)->orderBy('order')->with('type');
+            }
+        ])
+            ->where('name', $listing)
+            ->firstOrFail();
 
-        /** @var Collection $related */
+        $product->variations = $product->variations->groupBy('type.name')->sortKeys();
+
+        /** @var Collection<Product> $related */
         $related = $product->category->products()
             ->where('id', '!=', $product->id)
             ->limit(4)
@@ -44,7 +59,7 @@ class ListingController extends Controller
         }
 
         return view('listing', [
-            'product' => $product->loadMissing('category', 'variations'),
+            'product' => $product,
             'related' => $related,
         ]);
     }
