@@ -10,27 +10,34 @@
       <h1 class="display-5 fw-bolder mb-0" v-text="product.name"></h1>
       <div class="small mb-2" v-text="'SKU:' + product.sku"></div>
       <div class="fs-5 mb-3">
-        <div v-if="product.sale_price">
+        <div v-if="salePrice">
           <span
             class="text-muted text-decoration-line-through me-1"
-            v-text="'$' + product.price"
+            v-text="'$' + price"
           ></span>
-          <span v-text="'$' + product.sale_price"></span>
+          <span v-text="'$' + salePrice"></span>
         </div>
-        <div v-else v-text="'$' + product.price"></div>
+        <div v-else v-text="'$' + price"></div>
       </div>
       <p class="lead" v-text="product.description"></p>
       <div
         v-for="(variations, variationType) in product.groupedVariations"
         :key="variationType"
       >
-        <label class="form-label" v-text="variationType"></label>
-        <select class="form-select" v-model="variations[variationType]">
+        <label class="form-label mb-0 ps-2" v-text="variationType"></label>
+        <select
+          class="form-select mb-3"
+          v-model="selectedVariations[variationType]"
+          @change="variationSelected(selectedVariations[variationType])"
+        >
+          <option value="0" selected disabled hidden>
+            -- Select a {{ variationType }} --
+          </option>
           <option
             v-for="variation in variations"
             :key="variation.id"
             v-text="variation.name"
-            :value="variation"
+            :value="variation.id"
           ></option>
         </select>
       </div>
@@ -58,12 +65,52 @@ export default {
   },
   data() {
     return {
-      variations: [],
+      price: this.product.price,
+      salePrice: this.product.sale_price,
+      selectedVariations: {},
     };
+  },
+  created() {
+    this.product.variations.forEach((variation) => {
+      this.selectedVariations[variation.type.name] = 0;
+    });
   },
   methods: {
     addToCart() {
-      this.$store.commit("addToCart", this.product);
+      this.$store.commit("addToCart", { ...this.product, quantity: 1 });
+    },
+    variationSelected(variationId) {
+      this.calculatePrice();
+      let variation = this.product.variations.find(
+        (variation) => variation.id === variationId
+      );
+      if (variation.image) {
+        console.log(variation.image);
+      }
+    },
+    calculatePrice() {
+      this.price = this.product.price;
+      this.salePrice = this.product.sale_price ?? null;
+      for (let variationId of Object.values(this.selectedVariations)) {
+        if (variationId !== 0) {
+          let variation = this.product.variations.find(
+            (variation) => variation.id === variationId
+          );
+          if (variation.price_modifier) {
+            this.price =
+              parseFloat(this.price) + parseFloat(variation.price_modifier);
+            if (this.salePrice) {
+              this.salePrice =
+                parseFloat(this.salePrice) +
+                parseFloat(variation.price_modifier);
+            }
+          }
+        }
+      }
+      this.price = this.price.toFixed(2);
+      if (this.salePrice) {
+        this.salePrice = this.salePrice.toFixed(2);
+      }
     },
   },
 };

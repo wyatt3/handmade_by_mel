@@ -16,6 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->string('name');
             $table->decimal('price_modifier', 8, 2);
+            $table->string('image')->nullable();
             $table->boolean('active')->default(true);
             $table->integer('order')->default(1);
             $table->bigInteger('product_id')->unsigned();

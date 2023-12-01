@@ -21,6 +21,7 @@ class ProductVariationFactory extends Factory
         return [
             'name' => $this->faker->word(),
             'price_modifier' => $this->faker->randomFloat(2, 1, 10),
+            'image' => $this->faker->imageUrl(),
             'active' => $this->faker->boolean(),
             'order' => $this->faker->numberBetween(1, 10),
             'product_id' => Product::factory(),
