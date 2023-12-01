@@ -25,6 +25,11 @@ export const store = createStore({
         saveCart(state) {
             window.localStorage.setItem('cart', JSON.stringify(state.cart));
             window.localStorage.setItem('count', state.count);
+        },
+        resetCart(state) {
+            state.cart = [];
+            state.count = 0;
+            this.commit('saveCart');
         }
     }
 });

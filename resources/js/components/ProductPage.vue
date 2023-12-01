@@ -77,7 +77,11 @@ export default {
   },
   methods: {
     addToCart() {
-      this.$store.commit("addToCart", { ...this.product, quantity: 1 });
+      this.$store.commit("addToCart", {
+        product: this.product,
+        variations: this.selectedVariations,
+        quantity: 1,
+      });
     },
     variationSelected(variationId) {
       this.calculatePrice();

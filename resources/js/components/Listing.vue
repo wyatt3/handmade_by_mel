@@ -9,7 +9,7 @@
       >
         Sale
       </div>
-      <a :href="'/listings/' + product.name">
+      <a :href="'/' + product.name">
         <img
           class="card-img-top"
           src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
@@ -20,7 +20,7 @@
       <div class="card-body p-4">
         <div class="text-center">
           <!-- Product name-->
-          <a class="product-name" :href="'/listings/' + product.name">
+          <a class="product-name" :href="'/' + product.name">
             <h5 class="fw-bolder" v-text="product.name"></h5>
           </a>
           <!-- Product price-->

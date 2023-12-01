@@ -29,7 +29,7 @@ Route::domain('admin.' . env('APP_URL'))->group(function () {
 Route::get('/', [Controller::class, 'index'])->name('home');
 Route::get('/about', [Controller::class, 'about'])->name('about');
 
-Route::get('listings/{listing}', [ListingController::class, 'show'])->name('listing.show');
-
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::get('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+
+Route::get('/{listing}', [ListingController::class, 'show'])->name('listing.show');
