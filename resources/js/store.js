@@ -22,6 +22,10 @@ export const store = createStore({
             state.count = state.cart.length;
             this.commit('saveCart');
         },
+        updateQuantity(state, index, quantity) {
+            state.cart[index].quantity = quantity;
+            this.commit('saveCart');
+        },
         saveCart(state) {
             window.localStorage.setItem('cart', JSON.stringify(state.cart));
             window.localStorage.setItem('count', state.count);
