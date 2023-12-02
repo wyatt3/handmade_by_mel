@@ -3,7 +3,11 @@
   <div class="row mx-2">
     <div class="col-12 col-lg-8">
       <div class="card p-3">
-        <div class="d-flex" v-for="item in $store.state.cart" :key="item.id">
+        <div
+          class="d-flex"
+          v-for="(item, index) in $store.state.cart"
+          :key="item.id"
+        >
           <a :href="'/' + item.product.name" class="cart-item-image">
             <img
               :src="'/storage/' + item.product.image"
@@ -14,7 +18,8 @@
           <div class="cart-item-quantity d-flex">
             <button
               class="btn btn-sm btn-outline-secondary"
-              @click="decreaseQuantity(item)"
+              :disabled="item.quantity <= 1"
+              @click="decreaseQuantity(item, index)"
             >
               -
             </button>
@@ -26,26 +31,18 @@
             />
             <button
               class="btn btn-sm btn-outline-secondary"
-              @click="increaseQuantity(item)"
+              :disabled="item.quantity >= 10"
+              @click="increaseQuantity(item, index)"
             >
               +
             </button>
           </div>
 
-          <div class="cart-item-price">
-            <div v-if="item.product.sale_price">
-              <span
-                class="text-muted text-decoration-line-through me-1"
-                v-text="'$' + item.product.price"
-              ></span>
-              <span v-text="'$' + item.product.sale_price"></span>
-            </div>
-            <div v-else v-text="'$' + item.product.price"></div>
-          </div>
+          <div class="cart-item-price" v-text="'$' + item.subTotal"></div>
 
           <button
             class="btn btn-sm btn-outline-secondary"
-            @click="removeFromCart(item)"
+            @click="removeFromCart(index)"
           >
             Remove
           </button>
@@ -62,6 +59,23 @@
 export default {
   data() {
     return {};
+  },
+  methods: {
+    removeFromCart(index) {
+      this.$store.commit("removeFromCart", index);
+    },
+    increaseQuantity(item, index) {
+      this.$store.commit("updateQuantity", {
+        index: index,
+        quantity: item.quantity + 1,
+      });
+    },
+    decreaseQuantity(item, index) {
+      this.$store.commit("updateQuantity", {
+        index: index,
+        quantity: item.quantity - 1,
+      });
+    },
   },
 };
 </script>

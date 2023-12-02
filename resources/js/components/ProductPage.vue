@@ -81,6 +81,9 @@ export default {
         product: this.product,
         variations: this.selectedVariations,
         quantity: 1,
+        unit_price: this.salePrice
+          ? parseFloat(this.salePrice)
+          : parseFloat(this.price),
       });
     },
     variationSelected(variationId) {
