@@ -11,19 +11,18 @@
     <script src="{{ asset('js/app.js') }}" defer></script>
 </head>
 
-<body>
-
+<body class="d-flex flex-column">
     <div id="app">
         @include('partials.navbar')
 
         @yield('content')
 
-        <footer class="py-5 bg-dark">
-            <div class="container">
-                <p class="m-0 text-center text-tertiary">Copyright &copy; {{ config('app.name') }} {{ date('Y') }}</p>
-            </div>
-        </footer>
     </div>
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-tertiary">Copyright &copy; {{ config('app.name') }} {{ date('Y') }}</p>
+        </div>
+    </footer>
 </body>
 
 </html>

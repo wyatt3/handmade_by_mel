@@ -6,3 +6,6 @@
 
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
+
+body {min-height: 100vh;}
+#app {flex: 1;}

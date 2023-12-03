@@ -38,7 +38,10 @@
             </button>
           </div>
 
-          <div class="cart-item-price" v-text="'$' + item.subTotal"></div>
+          <div
+            class="cart-item-price"
+            v-text="'$' + item.subTotal.toFixed(2)"
+          ></div>
 
           <button
             class="btn btn-sm btn-outline-secondary"

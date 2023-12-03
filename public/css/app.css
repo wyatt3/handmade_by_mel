@@ -11977,3 +11977,10 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+body {
+  min-height: 100vh;
+}
+
+#app {
+  flex: 1;
+}
