@@ -53,7 +53,18 @@
       </div>
     </div>
     <div class="col-12 col-lg-4">
-      <div class="card"></div>
+      <div class="card p-3">
+        <div class="d-flex justify-content-between">
+          <span class="fw-bold">Subtotal:</span
+          ><span>${{ $store.state.subTotal.toFixed(2) }}</span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <span class="fw-bold">Shipping:</span><span>--</span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <span class="fw-bold">Tax:</span><span>--</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
