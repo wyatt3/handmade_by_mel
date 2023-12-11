@@ -20,7 +20,7 @@ class ListingControllerTest extends TestCase
     {
         $this->mockProductService->shouldReceive('getProducts')
             ->once()
-            ->andReturn(collect([]));
+            ->andReturn(collect([Product::factory()->make()]));
 
         $response = $this->getJson('/api/listings', [
             'offset' => 0,
