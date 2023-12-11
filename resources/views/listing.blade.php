@@ -5,7 +5,7 @@
 <!-- Product section-->
 <section class="py-5">
     <div class="container px-4 px-lg-5 my-5">
-        <a href="{{ route('home') }}" class="d-block mb-2"><i class="bi bi-arrow-left-circle"></i> back to all products</a>
+        <a href="{{ route('home') }}" class="d-block mb-2 text-dark"><i class="bi bi-arrow-left-circle"></i> back to all products</a>
         <product-page :product="{{ json_encode($product) }}"></product-page>
     </div>
 </section>
