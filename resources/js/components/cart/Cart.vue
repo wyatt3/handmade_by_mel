@@ -59,10 +59,12 @@
           ><span>${{ $store.state.subTotal.toFixed(2) }}</span>
         </div>
         <div class="d-flex justify-content-between">
-          <span class="fw-bold">Shipping:</span><span>--</span>
+          <span class="fw-bold">Shipping:</span
+          ><span>(Calculated at Checkout)</span>
         </div>
         <div class="d-flex justify-content-between">
-          <span class="fw-bold">Tax:</span><span>--</span>
+          <span class="fw-bold">Tax:</span>
+          <span>(Calculated at Checkout)</span>
         </div>
       </div>
     </div>
