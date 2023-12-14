@@ -22,11 +22,6 @@ class Controller extends BaseController
         return view('about');
     }
 
-    public function adminIndex()
-    {
-        return view('admin.index');
-    }
-
     public function adminAbout()
     {
         $contents = File::get(base_path('resources/views/partials/about.blade.php'));
