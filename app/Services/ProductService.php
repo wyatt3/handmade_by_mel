@@ -22,7 +22,9 @@ class ProductService
         ?int $limit = null,
         ?int $categoryId = null,
         bool $restrictToActive = false,
-        ?string $search = null
+        ?string $search = null,
+        ?string $sort = null,
+        ?bool $sortDesc = false
     ): Collection {
         $products = Product::query();
 
@@ -36,6 +38,12 @@ class ProductService
 
         if (filled($search)) {
             $products->where('name', 'like', "%{$search}%");
+        }
+
+        if (filled($sort)) {
+            $products->orderBy($sort, $sortDesc ? 'desc' : 'asc');
+        } else {
+            $products->orderByRaw('sale_price is NULL');
         }
 
         if (filled($offset)) {

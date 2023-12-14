@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Products\Product;
+use App\Models\Products\ProductCategory;
 use App\Models\Products\ProductVariation;
 use App\Models\Products\ProductVariationType;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ProductSeeder extends Seeder
@@ -18,15 +18,20 @@ class ProductSeeder extends Seeder
         $type1 = ProductVariationType::factory()->create();
         $type2 = ProductVariationType::factory()->create();
 
-        for ($i = 0; $i < 10; $i++) {
-            Product::factory()
-                ->has(
-                    ProductVariation::factory()->count(3)->for($type1, 'type'),
-                    'variations'
-                )->has(
-                    ProductVariation::factory()->count(3)->for($type2, 'type'),
-                    'variations'
-                )->create();
+        $categories = ProductCategory::factory()->count(5)->create();
+
+        foreach ($categories as $category) {
+            for ($i = 0; $i < 6; $i++) {
+                Product::factory()
+                    ->for($category, 'category')
+                    ->has(
+                        ProductVariation::factory()->count(3)->for($type1, 'type'),
+                        'variations'
+                    )->has(
+                        ProductVariation::factory()->count(3)->for($type2, 'type'),
+                        'variations'
+                    )->create();
+            }
         }
     }
 }

@@ -26,11 +26,9 @@ class ListingController extends Controller
     {
         $request->validated();
 
-        $listings = $this->productService->getProducts($request->input('offset'), $request->input('limit'), $request->input('category_id'), true, $request->input('search'));
+        $listings = $this->productService->getProducts($request->input('offset'), $request->input('limit'), $request->input('category_id'), true, $request->input('search'), $request->input('sort'), $request->input('sort_desc'));
 
-        return response()->json($listings->sortByDesc(function ($product) {
-            return $product->sale_price != null;
-        })->values()->all());
+        return response()->json($listings);
     }
 
     /**

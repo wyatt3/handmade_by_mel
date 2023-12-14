@@ -26,6 +26,8 @@ class GetListingsRequest extends FormRequest
             'limit' => 'nullable|integer|min:1|max:100',
             'category_id' => 'nullable|integer|min:1',
             'search' => 'nullable|string',
+            'sort' => 'nullable|string',
+            'sort_desc' => 'boolean',
         ];
     }
 }
