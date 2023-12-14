@@ -12,16 +12,9 @@
 </head>
 
 <body>
-
     <div id="app">
-
+        @include('partials.adminNav')
         @yield('content')
-
-        <footer class="py-5 bg-dark">
-            <div class="container">
-                <p class="m-0 text-center text-tertiary">Copyright &copy; {{ config('app.name') }} {{ date('Y') }}</p>
-            </div>
-        </footer>
     </div>
 </body>
 
