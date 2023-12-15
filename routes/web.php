@@ -23,7 +23,7 @@ Route::domain('admin.' . env('APP_URL'))->group(function () {
     Route::post('/login', [LoginController::class, 'login']);
     Route::middleware('auth')->group(function () {
         Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-        Route::get('/', [Controller::class, 'index'])->name('admin.home');
+        Route::get('/', [Controller::class, 'adminIndex'])->name('admin.home');
         Route::get('/about', [Controller::class, 'adminAbout'])->name('admin.about');
         Route::post('/about', [Controller::class, 'adminAboutUpdate']);
 

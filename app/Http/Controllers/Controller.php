@@ -17,6 +17,11 @@ class Controller extends BaseController
         return view('index');
     }
 
+    public function adminIndex()
+    {
+        return view('admin.orders.index');
+    }
+
     public function about()
     {
         return view('about');

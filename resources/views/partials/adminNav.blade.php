@@ -7,7 +7,7 @@
         <div class="collapse navbar-collapse" id="collapse">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Orders</a>
+                    <a class="nav-link" href="{{ route('admin.home') }}">Orders</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('products.index') }}">Products</a>
@@ -18,12 +18,12 @@
             </ul>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}">View Public Page</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('logout') }}">Logout</a>
+                    <a href="#" onclick="document.getElementById('logoutForm').submit()" class="nav-link">Logout</a>
                 </li>
             </ul>
+            <form id="logoutForm" action="{{ route('logout') }}" method="POST" class="d-none">
+                @csrf
+            </form>
         </div>
     </div>
 </nav>
