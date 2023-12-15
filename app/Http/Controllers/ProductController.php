@@ -21,7 +21,7 @@ class ProductController extends Controller
      */
     public function getProducts()
     {
-        $products = $this->productService->getProducts();
+        $products = $this->productService->getProducts(null, null, null, false, null, 'name');
 
         return response()->json($products->load('category'));
     }
