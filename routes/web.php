@@ -27,7 +27,11 @@ Route::domain('admin.' . env('APP_URL'))->group(function () {
         Route::get('/about', [Controller::class, 'adminAbout'])->name('admin.about');
         Route::post('/about', [Controller::class, 'adminAboutUpdate']);
 
-        Route::apiResource('products', ProductController::class);
+        Route::prefix('products')->group(function () {
+            Route::get('/{product}', [ProductController::class, 'show'])->name('products.show');
+            Route::get('/create', [ProductController::class, 'create'])->name('products.create');
+            Route::get('/', [ProductController::class, 'index'])->name('products.index');
+        });
     });
 });
 
