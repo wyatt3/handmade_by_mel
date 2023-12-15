@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ListingController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,10 +17,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/listings', [ListingController::class, 'getActiveListings']);
-
-Route::middleware('auth:sanctum')->group(function () {
+Route::domain('admin.' . env('APP_URL'))->middleware('auth:sanctum')->group(function () {
     Route::prefix('orders')->group(function () {
         Route::get('/', [OrderController::class, 'index']);
     });
+    Route::prefix('products')->group(function () {
+        Route::get('/', [ProductController::class, 'getProducts']);
+    });
 });
+
+Route::get('/listings', [ListingController::class, 'getActiveListings']);

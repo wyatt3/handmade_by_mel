@@ -1,8 +1,9 @@
 @extends('layouts.admin')
 
 @section('content')
+
 <div class="container mt-5">
-    <h1>Products</h1>
-    <product-list></product-list>
+    <h1>Create A Product</h1>
+
 </div>
 @endsection

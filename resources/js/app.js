@@ -9,6 +9,9 @@ import Listing from './components/Listing.vue';
 import Listings from './components/Listings.vue';
 import ProductPage from './components/ProductPage.vue';
 
+//admin components
+import ProductList from './components/admin/ProductList.vue';
+
 const app = createApp();
 
 app
@@ -18,4 +21,6 @@ app
     .component('listing', Listing)
     .component('listings', Listings)
     .component('product-page', ProductPage)
+    //admin components
+    .component('product-list', ProductList)
     .mount('#app');
