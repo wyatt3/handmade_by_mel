@@ -9,3 +9,6 @@
 
 body {min-height: 100vh;}
 #app {flex: 1;}
+
+.fake-link {border: none;background: none;color: darken($primary, 25);}
+.fake-link:hover {text-decoration: underline;}

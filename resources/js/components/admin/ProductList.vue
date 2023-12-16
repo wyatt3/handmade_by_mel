@@ -38,9 +38,9 @@
 
         <tr v-else v-for="product in filteredProducts" :key="product.id">
           <td>
-            <a class="text-dark" :href="`/products/${product.id}`">{{
-              product.name
-            }}</a>
+            <button class="fake-link" @click="openEditModal(product.id)">
+              {{ product.name }}
+            </button>
           </td>
           <td>{{ product.sku }}</td>
           <td>{{ product.category.name }}</td>
@@ -48,23 +48,29 @@
         </tr>
       </tbody>
     </table>
+    <modal :open="showEditModal" @toggle="showEditModal = !showEditModal">
+      <h1>Modal</h1>
+    </modal>
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import { HollowDotsSpinner } from "epic-spinners";
+import Modal from "../Modal.vue";
 
 export default {
   name: "ProductList",
   components: {
     HollowDotsSpinner,
+    Modal,
   },
   data() {
     return {
       products: [],
       search: "",
       loading: false,
+      showEditModal: false,
     };
   },
   created() {
@@ -81,6 +87,9 @@ export default {
         .finally(() => {
           this.loading = false;
         });
+    },
+    openEditModal(id) {
+      this.showEditModal = true;
     },
   },
   computed: {

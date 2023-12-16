@@ -11984,3 +11984,13 @@ body {
 #app {
   flex: 1;
 }
+
+.fake-link {
+  border: none;
+  background: none;
+  color: #367c70;
+}
+
+.fake-link:hover {
+  text-decoration: underline;
+}
