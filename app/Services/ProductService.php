@@ -56,4 +56,20 @@ class ProductService
 
         return $products->get();
     }
+
+    /**
+     * update the active status of a product
+     *
+     * @param Product $product
+     * @param boolean $active
+     * @return Product
+     */
+    public function updateActiveStatus(Product $product, bool $active): Product
+    {
+        $product->update([
+            'active' => $active
+        ]);
+
+        return $product;
+    }
 }

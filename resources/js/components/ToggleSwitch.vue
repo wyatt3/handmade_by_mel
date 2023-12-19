@@ -44,7 +44,7 @@ export default {
 }
 
 .switch input {
-  display: none;
+  visibility: hidden;
 }
 
 .slider {

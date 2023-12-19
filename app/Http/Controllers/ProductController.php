@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Products\Product;
 use App\Services\ProductService;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -57,5 +58,19 @@ class ProductController extends Controller
     public function create(): \Illuminate\Contracts\View\View
     {
         return view('admin.products.create');
+    }
+
+    /**
+     * updateActiveStatus
+     *
+     * @param Request $request
+     * @param Product $product
+     * @return \Illuminate\Http\Response
+     */
+    public function updateActiveStatus(Request $request, Product $product): \Illuminate\Http\Response
+    {
+        $this->productService->updateActiveStatus($product, (bool) $request->input('active'));
+
+        return response('', 204);
     }
 }

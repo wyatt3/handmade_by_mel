@@ -23,11 +23,15 @@ Route::domain('admin.' . env('APP_URL'))->middleware('auth:sanctum')->group(func
         Route::get('/', [OrderController::class, 'index']);
     });
     Route::prefix('products')->group(function () {
-        Route::get('/', [ProductController::class, 'getProducts']);
-        Route::get('/{product}', [ProductController::class, 'show']);
         Route::prefix('categories')->group(function () {
             Route::get('/', [ProductCategoryController::class, 'index']);
+            Route::post('/', [ProductCategoryController::class, 'store']);
+            Route::put('/{category}', [ProductCategoryController::class, 'update']);
+            Route::delete('/{category}', [ProductCategoryController::class, 'destroy']);
         });
+        Route::get('/', [ProductController::class, 'getProducts']);
+        Route::put('/{product}/active', [ProductController::class, 'updateActiveStatus']);
+        Route::get('/{product}', [ProductController::class, 'show']);
     });
 });
 
