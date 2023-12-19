@@ -23,6 +23,7 @@ Route::domain('admin.' . env('APP_URL'))->middleware('auth:sanctum')->group(func
     });
     Route::prefix('products')->group(function () {
         Route::get('/', [ProductController::class, 'getProducts']);
+        Route::get('/{product}', [ProductController::class, 'show']);
     });
 });
 

@@ -24,6 +24,17 @@ export default {
       this.$emit("toggle");
     },
   },
+  watch: {
+    open(newVal) {
+      if (newVal) {
+        console.log("open");
+        document.body.classList.add("modal-open");
+      } else {
+        console.log("close");
+        document.body.classList.remove("modal-open");
+      }
+    },
+  },
 };
 </script>
 
@@ -38,7 +49,7 @@ export default {
   background-color: rgba(0, 0, 0, 0.5);
 }
 .modal-body {
-  max-height: 100%;
+  max-height: 95%;
   overflow-y: auto;
   position: fixed;
   top: 50%;

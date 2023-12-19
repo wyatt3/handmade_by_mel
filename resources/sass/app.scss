@@ -12,3 +12,5 @@ body {min-height: 100vh;}
 
 .fake-link {border: none;background: none;color: darken($primary, 25);}
 .fake-link:hover {text-decoration: underline;}
+
+.modal-open {overflow: hidden;}

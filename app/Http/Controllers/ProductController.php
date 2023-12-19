@@ -37,6 +37,17 @@ class ProductController extends Controller
     }
 
     /**
+     * show
+     *
+     * @param Product $product
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show(Product $product): \Illuminate\Http\JsonResponse
+    {
+        return response()->json($product->load('category', 'variations'));
+    }
+
+    /**
      * create
      *
      * @return \Illuminate\Contracts\View\View
