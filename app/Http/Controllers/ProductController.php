@@ -44,7 +44,9 @@ class ProductController extends Controller
      */
     public function show(Product $product): \Illuminate\Http\JsonResponse
     {
-        return response()->json($product->load('category', 'variations'));
+        $product->load('category', 'variations.type');
+        $product->groupedVariations = $product->variations->groupBy('type.name')->sortKeys();
+        return response()->json($product);
     }
 
     /**

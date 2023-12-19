@@ -119,11 +119,18 @@
               <select
                 class="form-control"
                 id="productCategory"
-                v-model="selectedProduct.category_id"
-              ></select>
+                v-model="selectedProduct.product_category_id"
+              >
+                <option
+                  v-for="category in categories"
+                  :key="category.id"
+                  :value="category.id"
+                >
+                  {{ category.name }}
+                </option>
+              </select>
             </div>
           </div>
-          {{ selectedProduct.variations }}
         </div>
       </div>
     </modal>
@@ -146,6 +153,8 @@ export default {
   data() {
     return {
       products: [],
+      categories: [],
+      variationTypes: [],
       search: "",
       loading: false,
       showEditModal: false,
@@ -154,6 +163,7 @@ export default {
   },
   created() {
     this.fetchProducts();
+    this.fetchCategories();
   },
   methods: {
     fetchProducts() {
@@ -166,6 +176,11 @@ export default {
         .finally(() => {
           this.loading = false;
         });
+    },
+    fetchCategories() {
+      axios.get("/api/products/categories").then((response) => {
+        this.categories = response.data;
+      });
     },
     openEditModal(id) {
       this.selectedProduct = null;

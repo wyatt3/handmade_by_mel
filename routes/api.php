@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ListingController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,9 @@ Route::domain('admin.' . env('APP_URL'))->middleware('auth:sanctum')->group(func
     Route::prefix('products')->group(function () {
         Route::get('/', [ProductController::class, 'getProducts']);
         Route::get('/{product}', [ProductController::class, 'show']);
+        Route::prefix('categories')->group(function () {
+            Route::get('/', [ProductCategoryController::class, 'index']);
+        });
     });
 });
 
