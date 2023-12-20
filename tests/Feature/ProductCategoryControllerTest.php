@@ -41,6 +41,6 @@ class ProductCategoryControllerTest extends TestCase
 
         $response = app()->make(ProductCategoryController::class)->destroy($category);
 
-        $this->assertEquals(200, $response->status());
+        $this->assertEquals(204, $response->status());
     }
 }

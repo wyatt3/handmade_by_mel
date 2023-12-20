@@ -61,11 +61,11 @@ class ProductCategoryController extends Controller
      * destroy
      *
      * @param ProductCategory $category
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Response
      */
-    public function destroy(ProductCategory $category): \Illuminate\Http\JsonResponse
+    public function destroy(ProductCategory $category): \Illuminate\Http\Response
     {
         $category->delete();
-        return response()->json(['message' => 'Category deleted successfully.']);
+        return response()->noContent();
     }
 }

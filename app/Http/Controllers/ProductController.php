@@ -71,6 +71,6 @@ class ProductController extends Controller
     {
         $this->productService->updateActiveStatus($product, (bool) $request->input('active'));
 
-        return response('', 204);
+        return response()->noContent();
     }
 }

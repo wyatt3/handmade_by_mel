@@ -4,6 +4,7 @@ use App\Http\Controllers\ListingController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductVariationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +29,12 @@ Route::domain('admin.' . env('APP_URL'))->middleware('auth:sanctum')->group(func
             Route::post('/', [ProductCategoryController::class, 'store']);
             Route::put('/{category}', [ProductCategoryController::class, 'update']);
             Route::delete('/{category}', [ProductCategoryController::class, 'destroy']);
+        });
+        Route::prefix('variations')->group(function () {
+            Route::get('/', [ProductVariationController::class, 'getVariations']);
+            Route::post('/', [ProductVariationController::class, 'storeVariation']);
+            Route::put('/{variation}', [ProductVariationController::class, 'updateVariation']);
+            Route::delete('/{variation}', [ProductVariationController::class, 'destroyVariation']);
         });
         Route::get('/', [ProductController::class, 'getProducts']);
         Route::put('/{product}/active', [ProductController::class, 'updateActiveStatus']);

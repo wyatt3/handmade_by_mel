@@ -3,17 +3,22 @@
     <div class="row">
       <div class="row col-12 col-md-8">
         <div class="col-12 col-md-4 mb-2 text-md-center">
-          <a class="btn btn-primary" href="/products/create"
-            ><i class="bi bi-plus"></i>New Product</a
-          >
+          <a class="btn btn-primary" href="/products/create">
+            <i class="bi bi-plus"></i>
+            New Product
+          </a>
         </div>
         <div class="col-12 col-md-4 mb-2 text-md-center">
-          <button class="btn btn-primary" @click="fetchProducts">
+          <button class="btn btn-primary" @click="openCategoryModal">
+            <i class="bi bi-collection"></i>
             Categories
           </button>
         </div>
         <div class="col-12 col-md-4 mb-2 text-md-center">
-          <button class="btn btn-primary">Variation Types</button>
+          <button class="btn btn-primary" @click="openVariationModal">
+            <i class="bi bi-diagram-2"></i>
+            Variation Types
+          </button>
         </div>
       </div>
       <div class="col-12 col-md-4">
@@ -32,7 +37,6 @@
           <th>Name</th>
           <th>SKU</th>
           <th>Category</th>
-          <th class="d-none d-md-table-cell">On Sale</th>
           <th>Active</th>
         </tr>
       </thead>
@@ -57,9 +61,6 @@
           </td>
           <td>{{ product.sku }}</td>
           <td>{{ product.category.name }}</td>
-          <td class="d-none d-md-table-cell">
-            {{ product.sale_price ? "Yes" : "No" }}
-          </td>
           <td>
             <toggle-switch
               v-model="product.active"
@@ -72,7 +73,27 @@
     <modal :open="showEditModal" @toggle="showEditModal = !showEditModal">
       <edit-product
         :product="selectedProduct"
+        :categories="categories"
+        :variation-types="variationTypes"
         @product-updated="fetchProducts"
+      />
+    </modal>
+    <modal
+      :open="showCategoryModal"
+      @toggle="showCategoryModal = !showCategoryModal"
+    >
+      <product-categories
+        :categories="categories"
+        @categories-updated="fetchCategories"
+      />
+    </modal>
+    <modal
+      :open="showVariationModal"
+      @toggle="showVariationModal = !showVariationModal"
+    >
+      <product-variation-types
+        :variation-types="variationTypes"
+        @variation-types-updated="fetchVariationTypes"
       />
     </modal>
   </div>
@@ -84,6 +105,8 @@ import { HollowDotsSpinner } from "epic-spinners";
 import Modal from "../Modal.vue";
 import ToggleSwitch from "../ToggleSwitch.vue";
 import EditProduct from "./EditProduct.vue";
+import ProductCategories from "./ProductCategories.vue";
+import ProductVariationTypes from "./ProductVariationTypes.vue";
 
 export default {
   name: "ProductList",
@@ -92,6 +115,8 @@ export default {
     Modal,
     ToggleSwitch,
     EditProduct,
+    ProductCategories,
+    ProductVariationTypes,
   },
   data() {
     return {
@@ -101,6 +126,8 @@ export default {
       search: "",
       loading: false,
       showEditModal: false,
+      showCategoryModal: false,
+      showVariationModal: false,
       selectedProduct: null,
     };
   },
@@ -125,12 +152,23 @@ export default {
         this.categories = response.data;
       });
     },
+    fetchVariationTypes() {
+      axios.get("/api/products/variation-types").then((response) => {
+        this.variationTypes = response.data;
+      });
+    },
     openEditModal(id) {
       this.selectedProduct = null;
       this.showEditModal = true;
       axios.get(`/api/products/${id}`).then((response) => {
         this.selectedProduct = response.data;
       });
+    },
+    openCategoryModal() {
+      this.showCategoryModal = true;
+    },
+    openVariationModal() {
+      this.showVariationModal = true;
     },
     updateProductActive(id, active) {
       axios
@@ -157,16 +195,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.edit-modal-body {
-  min-height: 88vh;
-}
-
-.edit-modal-loading {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-</style>

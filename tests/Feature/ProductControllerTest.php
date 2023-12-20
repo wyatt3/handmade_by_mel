@@ -47,4 +47,15 @@ class ProductControllerTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function testUpdateActiveStatus()
+    {
+        $this->actingAs($this->user);
+        $product = Product::factory()->create();
+        $response = app()->make(ProductController::class)->updateActiveStatus(new \Illuminate\Http\Request([
+            'active' => false
+        ]), $product);
+
+        $this->assertEquals(204, $response->status());
+    }
 }

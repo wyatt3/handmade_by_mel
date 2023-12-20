@@ -1,5 +1,5 @@
 <template>
-  <div class="container my-4 edit-modal-body">
+  <div class="container my-4 modal-body">
     <h1>Edit Product</h1>
     <div class="edit-modal-loading" v-if="!product">
       <hollow-dots-spinner
@@ -111,6 +111,14 @@ export default {
       type: Object,
       required: false,
     },
+    categories: {
+      type: Array,
+      required: false,
+    },
+    variationTypes: {
+      type: Array,
+      required: false,
+    },
   },
   methods: {
     saveProduct() {
@@ -125,4 +133,14 @@ export default {
 </script>
 
 <style scoped>
+.modal-body {
+  min-height: 88vh;
+}
+
+.edit-modal-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 </style>
