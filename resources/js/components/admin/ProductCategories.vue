@@ -11,26 +11,31 @@
       />
     </div>
     <div v-else>
-      <div class="category-table">
-        <div class="variation-table-header d-flex">
-          <span class="full">Name</span>
-          <span class="half">Edit</span>
-          <span class="half">Delete</span>
-        </div>
-        <div v-for="category in categories" :key="category.id">
-          <div class="category-name">{{ category.name }}</div>
-          <div class="category-actions">
-            <button class="btn btn-sm btn-primary">Edit</button>
-            <button class="btn btn-sm btn-danger">Delete</button>
-          </div>
-        </div>
-      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Edit</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <product-category-row
+            v-for="category in categories"
+            :key="category.id"
+            :category="category"
+            @updated="$emit('updated')"
+            @deleted="$emit('deleted')"
+          />
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
 
 <script>
 import { HollowDotsSpinner } from "epic-spinners";
+import ProductCategoryRow from "./ProductCategoryRow.vue";
 export default {
   props: {
     categories: {
@@ -40,9 +45,7 @@ export default {
   },
   components: {
     HollowDotsSpinner,
-  },
-  data() {
-    return {};
+    ProductCategoryRow,
   },
 };
 </script>

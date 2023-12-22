@@ -60,7 +60,9 @@
             </button>
           </td>
           <td>{{ product.sku }}</td>
-          <td>{{ product.category.name }}</td>
+          <td>
+            {{ product.category ? product.category.name : "(No Category)" }}
+          </td>
           <td>
             <toggle-switch
               v-model="product.active"
@@ -84,7 +86,8 @@
     >
       <product-categories
         :categories="categories"
-        @categories-updated="fetchCategories"
+        @updated="fetchProducts"
+        @deleted="deleteCategory"
       />
     </modal>
     <modal
@@ -186,7 +189,7 @@ export default {
         return (
           product.name.toLowerCase().includes(this.search.toLowerCase()) ||
           product.sku.toLowerCase().includes(this.search.toLowerCase()) ||
-          product.category.name
+          product.category?.name
             .toLowerCase()
             .includes(this.search.toLowerCase())
         );

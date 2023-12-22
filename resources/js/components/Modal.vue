@@ -2,7 +2,7 @@
   <transition name="fade">
     <div class="modal-container" v-if="open">
       <div class="background" @click="toggle"></div>
-      <div class="modal-body bg-white">
+      <div class="modal-body bg-body">
         <slot></slot>
       </div>
     </div>
@@ -27,10 +27,8 @@ export default {
   watch: {
     open(newVal) {
       if (newVal) {
-        console.log("open");
         document.body.classList.add("modal-open");
       } else {
-        console.log("close");
         document.body.classList.remove("modal-open");
       }
     },

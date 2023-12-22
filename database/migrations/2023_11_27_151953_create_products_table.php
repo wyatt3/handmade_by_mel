@@ -19,8 +19,8 @@ return new class extends Migration
             $table->decimal('sale_price', 8, 2)->nullable();
             $table->string('sku')->unique()->index('sku');
             $table->boolean('active')->default(true);
-            $table->bigInteger('product_category_id')->unsigned();
-            $table->foreign('product_category_id')->references('id')->on('product_categories');
+            $table->bigInteger('product_category_id')->unsigned()->nullable();
+            $table->foreign('product_category_id')->references('id')->on('product_categories')->nullOnDelete();
             $table->timestamps();
         });
     }
