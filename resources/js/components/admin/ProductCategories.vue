@@ -10,7 +10,22 @@
         color="#222E50"
       />
     </div>
-    <div v-else>{{ categories }}</div>
+    <div v-else>
+      <div class="category-table">
+        <div class="variation-table-header d-flex">
+          <span class="full">Name</span>
+          <span class="half">Edit</span>
+          <span class="half">Delete</span>
+        </div>
+        <div v-for="category in categories" :key="category.id">
+          <div class="category-name">{{ category.name }}</div>
+          <div class="category-actions">
+            <button class="btn btn-sm btn-primary">Edit</button>
+            <button class="btn btn-sm btn-danger">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 

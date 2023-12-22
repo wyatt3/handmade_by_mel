@@ -1,5 +1,5 @@
 <template>
-  <div class="container my-4 modal-body">
+  <div class="container my-4 edit-modal-body">
     <h1>Edit Product</h1>
     <div class="edit-modal-loading" v-if="!product">
       <hollow-dots-spinner
@@ -81,19 +81,58 @@
           :key="typeName"
         >
           <label>{{ typeName }}</label>
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Price Modifier</th>
-                <th>Image</th>
-                <th>Active</th>
-                <th>Edit</th>
-                <th>Delete</th>
-                <th>Reorder</th>
-              </tr>
-            </thead>
-          </table>
+
+          <div class="variation-table">
+            <div class="variation-table-header d-flex">
+              <span class="full">Name</span>
+              <span class="full">Price Modifier</span>
+              <span class="full">Image</span>
+              <span class="half">Active</span>
+              <span class="half">Edit</span>
+              <span class="half">Delete</span>
+              <span class="half"></span>
+            </div>
+            <div>
+              <draggable
+                v-model="product.groupedVariations[typeName]"
+                :options="dragOptions"
+                @start="drag = true"
+                @end="endDrag"
+              >
+                <div
+                  class="variation-table-row d-flex align-items-center"
+                  v-for="variation in variations"
+                  :key="variation.id"
+                >
+                  <span class="full">{{ variation.name }}</span>
+                  <span class="full">${{ variation.price_modifier }}</span>
+                  <span class="full">
+                    <img
+                      :src="variation.image"
+                      alt="variation image"
+                      style="max-width: 100px"
+                    />
+                  </span>
+                  <span class="half">
+                    <toggle-switch v-model="variation.active" />
+                  </span>
+                  <span class="half">
+                    <button class="btn btn-warning">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                  </span>
+                  <span class="half">
+                    <button class="btn btn-danger">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </span>
+                  <span class="variation-handle half">
+                    <i class="bi bi-grip-vertical"></i>
+                  </span>
+                </div>
+              </draggable>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -101,10 +140,14 @@
 </template>
 
 <script>
+import { VueDraggableNext } from "vue-draggable-next";
 import { HollowDotsSpinner } from "epic-spinners";
+import ToggleSwitch from "../ToggleSwitch.vue";
 export default {
   components: {
+    draggable: VueDraggableNext,
     HollowDotsSpinner,
+    ToggleSwitch,
   },
   props: {
     product: {
@@ -120,6 +163,11 @@ export default {
       required: false,
     },
   },
+  data() {
+    return {
+      drag: false,
+    };
+  },
   methods: {
     saveProduct() {
       axios
@@ -128,12 +176,25 @@ export default {
           this.$emit("product-updated");
         });
     },
+    endDrag() {
+      this.drag = false;
+    },
+  },
+  computed: {
+    dragOptions() {
+      return {
+        animation: 200,
+        group: "description",
+        disabled: false,
+        ghostClass: "ghost",
+      };
+    },
   },
 };
 </script>
 
 <style scoped>
-.modal-body {
+.edit-modal-body {
   min-height: 88vh;
 }
 
@@ -142,5 +203,39 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.variation-handle {
+  cursor: ns-resize;
+}
+
+.variation-handle i {
+  font-size: 1.3rem;
+}
+
+.variation-table-header {
+  font-weight: bold;
+  border-bottom: 1px solid #ccc;
+  padding: 0.5rem 0;
+}
+
+.variation-table-row {
+  border-bottom: 1px solid #ccc;
+  padding: 0.25rem 0;
+}
+
+.variation-table-header span.full,
+.variation-table-row span.full {
+  flex: 1;
+}
+
+.variation-table-header span.half,
+.variation-table-row span.half {
+  flex: 0.5;
+}
+
+.variation-table-header span.half:last-child,
+.variation-table-row span.half:last-child {
+  text-align: right;
 }
 </style>

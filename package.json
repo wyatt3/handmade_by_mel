@@ -25,6 +25,7 @@
         "epic-spinners": "^2.0.0",
         "vue": "^3.3.4",
         "vue-animate-height": "^1.1.2",
+        "vue-draggable-next": "^2.2.1",
         "vue-laravel-csrf": "^1.0.0",
         "vue-loader": "^17.2.2",
         "vue-select": "^4.0.0-beta.6",
