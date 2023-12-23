@@ -30,7 +30,7 @@
         "vue-loader": "^17.2.2",
         "vue-select": "^4.0.0-beta.6",
         "vue-template-compiler": "^2.7.14",
-        "vue-toast-notification": "^3.1.1",
+        "vue-toast-notification": "^3.1.2",
         "vuex": "^4.1.0"
     }
 }

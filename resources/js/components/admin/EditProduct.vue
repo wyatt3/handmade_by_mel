@@ -173,7 +173,16 @@ export default {
       axios
         .put(`/api/admin/products/${this.product.id}`, this.product)
         .then((response) => {
+          this.$toast.success("Product updated successfully", {
+            position: "top-right",
+          });
           this.$emit("product-updated");
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$toast.error("There was an error updating the product", {
+            position: "top-right",
+          });
         });
     },
     endDrag() {

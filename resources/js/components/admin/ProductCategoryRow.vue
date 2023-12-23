@@ -4,7 +4,11 @@
       <input type="text" class="form-control" v-model="category.name" />
     </td>
     <td>
-      <button class="btn btn-primary" @click="saveCategory">
+      <button
+        class="btn btn-primary"
+        @click="updateCategory"
+        :disabled="category.name.length <= 0"
+      >
         <i class="bi bi-check"></i>
       </button>
     </td>
@@ -54,32 +58,41 @@ export default {
         this.originalName = this.category.name;
       }
     },
-    saveCategory() {
+    updateCategory() {
       axios
-        .put(`/products/categories/${this.category.id}`, {
+        .put(`/api/products/categories/${this.category.id}`, {
           name: this.category.name,
         })
         .then((response) => {
-          this.toggleEdit();
+          this.editing = false;
+          this.$toast.success("Category updated.", {
+            position: "top-right",
+          });
           this.$emit("updated");
         })
         .catch((error) => {
           console.log(error);
+          this.$toast.error("Error updating category.", {
+            position: "top-right",
+          });
         });
     },
     deleteCategory() {
       axios
-        .delete(`/products/categories/${this.category.id}`)
+        .delete(`/api/products/categories/${this.category.id}`)
         .then((response) => {
-          this.$emit("deleted");
+          this.$toast.success("Category deleted.", {
+            position: "top-right",
+          });
+          this.$emit("deleted", this.category.id);
         })
         .catch((error) => {
           console.log(error);
+          this.$toast.error("Error deleting category.", {
+            position: "top-right",
+          });
         });
     },
   },
 };
 </script>
-
-<style scoped>
-</style>

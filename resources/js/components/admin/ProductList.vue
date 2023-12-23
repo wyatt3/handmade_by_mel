@@ -86,8 +86,9 @@
     >
       <product-categories
         :categories="categories"
+        @created="addCagetory($event)"
         @updated="fetchProducts"
-        @deleted="deleteCategory"
+        @deleted="deleteCategory($event)"
       />
     </modal>
     <modal
@@ -124,8 +125,8 @@ export default {
   data() {
     return {
       products: [],
-      categories: [],
-      variationTypes: [],
+      categories: null,
+      variationTypes: null,
       search: "",
       loading: false,
       showEditModal: false,
@@ -146,26 +147,56 @@ export default {
         .then((response) => {
           this.products = response.data;
         })
+        .catch((error) => {
+          console.log(error);
+          this.$toast.error("There was an error fetching the products", {
+            position: "top-right",
+          });
+        })
         .finally(() => {
           this.loading = false;
         });
     },
     fetchCategories() {
-      axios.get("/api/products/categories").then((response) => {
-        this.categories = response.data;
-      });
+      axios
+        .get("/api/products/categories")
+        .then((response) => {
+          this.categories = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$toast.error("There was an error fetching the categories", {
+            position: "top-right",
+          });
+        });
     },
     fetchVariationTypes() {
-      axios.get("/api/products/variation-types").then((response) => {
-        this.variationTypes = response.data;
-      });
+      axios
+        .get("/api/products/variation-types")
+        .then((response) => {
+          this.variationTypes = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$toast.error("There was an error fetching the variation types", {
+            position: "top-right",
+          });
+        });
     },
     openEditModal(id) {
       this.selectedProduct = null;
       this.showEditModal = true;
-      axios.get(`/api/products/${id}`).then((response) => {
-        this.selectedProduct = response.data;
-      });
+      axios
+        .get(`/api/products/${id}`)
+        .then((response) => {
+          this.selectedProduct = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$toast.error("There was an error fetching the product", {
+            position: "top-right",
+          });
+        });
     },
     openCategoryModal() {
       this.showCategoryModal = true;
@@ -180,7 +211,21 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+          this.$toast.error("There was an error updating the product", {
+            position: "top-right",
+          });
         });
+    },
+    addCagetory(category) {
+      console.log(category);
+      this.categories.push(category);
+      this.fetchProducts();
+    },
+    deleteCategory(id) {
+      this.categories = this.categories.filter((category) => {
+        return category.id !== id;
+      });
+      this.fetchProducts();
     },
   },
   computed: {
