@@ -138,6 +138,7 @@ export default {
   created() {
     this.fetchProducts();
     this.fetchCategories();
+    this.fetchVariationTypes();
   },
   methods: {
     fetchProducts() {
@@ -172,7 +173,7 @@ export default {
     },
     fetchVariationTypes() {
       axios
-        .get("/api/products/variation-types")
+        .get("/api/products/variations/types")
         .then((response) => {
           this.variationTypes = response.data;
         })
@@ -217,7 +218,6 @@ export default {
         });
     },
     addCagetory(category) {
-      console.log(category);
       this.categories.push(category);
       this.fetchProducts();
     },

@@ -5,6 +5,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductVariationController;
+use App\Http\Controllers\ProductVariationTypeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +32,12 @@ Route::domain('admin.' . env('APP_URL'))->middleware('auth:sanctum')->group(func
             Route::delete('/{category}', [ProductCategoryController::class, 'destroy']);
         });
         Route::prefix('variations')->group(function () {
+            Route::prefix('types')->group(function () {
+                Route::get('/', [ProductVariationTypeController::class, 'index']);
+                Route::post('/', [ProductVariationTypeController::class, 'store']);
+                Route::put('/{type}', [ProductVariationTypeController::class, 'update']);
+                Route::delete('/{type}', [ProductVariationTypeController::class, 'destroy']);
+            });
             Route::get('/', [ProductVariationController::class, 'getVariations']);
             Route::post('/', [ProductVariationController::class, 'storeVariation']);
             Route::put('/{variation}', [ProductVariationController::class, 'updateVariation']);
