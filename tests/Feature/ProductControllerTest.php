@@ -57,5 +57,9 @@ class ProductControllerTest extends TestCase
         ]), $product);
 
         $this->assertEquals(204, $response->status());
+        $this->assertDatabaseHas('products', [
+            'id' => $product->getKey(),
+            'active' => false
+        ]);
     }
 }

@@ -22,6 +22,9 @@ class ProductCategoryControllerTest extends TestCase
         ]));
 
         $this->assertEquals(200, $response->status());
+        $this->assertDatabaseHas('product_categories', [
+            'name' => 'Test Category'
+        ]);
     }
 
     public function testUpdate()
@@ -33,6 +36,9 @@ class ProductCategoryControllerTest extends TestCase
         ]), $category);
 
         $this->assertEquals(200, $response->status());
+        $this->assertDatabaseHas('product_categories', [
+            'name' => 'Test Category'
+        ]);
     }
 
     public function testDestroy()
@@ -42,5 +48,8 @@ class ProductCategoryControllerTest extends TestCase
         $response = app()->make(ProductCategoryController::class)->destroy($category);
 
         $this->assertEquals(204, $response->status());
+        $this->assertDatabaseMissing('product_categories', [
+            'name' => $category->name
+        ]);
     }
 }

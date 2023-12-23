@@ -22,6 +22,9 @@ class ProductVariationControllerTest extends TestCase
         ]));
 
         $this->assertEquals(200, $response->status());
+        $this->assertDatabaseHas('product_variation_types', [
+            'name' => 'Test Variation'
+        ]);
     }
 
     public function testUpdate()
@@ -33,6 +36,9 @@ class ProductVariationControllerTest extends TestCase
         ]), $variation);
 
         $this->assertEquals(200, $response->status());
+        $this->assertDatabaseHas('product_variation_types', [
+            'name' => 'Test Variation'
+        ]);
     }
 
     public function testDestroy()
@@ -42,5 +48,8 @@ class ProductVariationControllerTest extends TestCase
         $response = app()->make(ProductVariationController::class)->destroy($variation);
 
         $this->assertEquals(204, $response->status());
+        $this->assertDatabaseMissing('product_variation_types', [
+            'name' => $variation->name
+        ]);
     }
 }
