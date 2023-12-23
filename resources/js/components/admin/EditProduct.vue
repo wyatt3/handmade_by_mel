@@ -117,7 +117,7 @@
                     <toggle-switch v-model="variation.active" />
                   </span>
                   <span class="half">
-                    <button class="btn btn-warning">
+                    <button class="btn btn-tertiary">
                       <i class="bi bi-pencil"></i>
                     </button>
                   </span>

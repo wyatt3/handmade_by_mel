@@ -69,7 +69,6 @@ export default {
   props: {
     variationTypes: {
       type: Array,
-      required: true,
     },
   },
   components: {
@@ -96,7 +95,7 @@ export default {
           this.$toast.success("Variation type created.", {
             position: "top-right",
           });
-          this.$emit("variation-type-updated");
+          this.$emit("created", response.data);
           this.toggleAdd();
         })
         .catch((error) => {

@@ -72,7 +72,11 @@
         </tr>
       </tbody>
     </table>
-    <modal :open="showEditModal" @toggle="showEditModal = !showEditModal">
+    <modal
+      :open="showEditModal"
+      size="full"
+      @toggle="showEditModal = !showEditModal"
+    >
       <edit-product
         :product="selectedProduct"
         :categories="categories"
@@ -82,22 +86,26 @@
     </modal>
     <modal
       :open="showCategoryModal"
+      size="full"
       @toggle="showCategoryModal = !showCategoryModal"
     >
       <product-categories
         :categories="categories"
-        @created="addCagetory($event)"
+        @created="addCategory($event)"
         @updated="fetchProducts"
         @deleted="deleteCategory($event)"
       />
     </modal>
     <modal
       :open="showVariationModal"
+      size="full"
       @toggle="showVariationModal = !showVariationModal"
     >
       <product-variation-types
         :variation-types="variationTypes"
-        @variation-types-updated="fetchVariationTypes"
+        @created="addVariationType($event)"
+        @updated="fetchProducts"
+        @deleted="deleteVariationType($event)"
       />
     </modal>
   </div>
@@ -217,13 +225,23 @@ export default {
           });
         });
     },
-    addCagetory(category) {
+    addCategory(category) {
       this.categories.push(category);
       this.fetchProducts();
     },
     deleteCategory(id) {
       this.categories = this.categories.filter((category) => {
         return category.id !== id;
+      });
+      this.fetchProducts();
+    },
+    addVariationType(variationType) {
+      this.variationTypes.push(variationType);
+      this.fetchProducts();
+    },
+    deleteVariationType(id) {
+      this.variationTypes = this.variationTypes.filter((variationType) => {
+        return variationType.id !== id;
       });
       this.fetchProducts();
     },

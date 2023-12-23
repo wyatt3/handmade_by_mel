@@ -13,6 +13,7 @@
 
 <body>
     <div id="app">
+        <confirm-modal ref="confirm"></confirm-modal>
         @include('partials.adminNav')
         @yield('content')
     </div>

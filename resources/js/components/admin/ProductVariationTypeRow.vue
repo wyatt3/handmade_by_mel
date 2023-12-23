@@ -23,7 +23,7 @@
       <span>{{ variation.name }}</span>
     </td>
     <td>
-      <button class="btn btn-warning" @click="toggleEdit">
+      <button class="btn btn-tertiary" @click="toggleEdit">
         <i class="bi bi-pencil"></i>
       </button>
     </td>
@@ -78,19 +78,30 @@ export default {
         });
     },
     deleteVariation() {
-      axios
-        .delete(`/api/products/variations/types/${this.variation.id}`)
-        .then((response) => {
-          this.$toast.success("Variation Type deleted.", {
-            position: "top-right",
-          });
-          this.$emit("deleted", this.variation.id);
+      this.$root.$refs.confirm
+        .show({
+          title: "Confirm Delete",
+          message: `Are you sure you want to delete the variation type "${this.variation.name}"?\nThis will also delete any product variations under this type.`,
+          okButton: "Delete",
         })
-        .catch((error) => {
-          console.log(error);
-          this.$toast.error("Error deleting variation type.", {
-            position: "top-right",
-          });
+        .then(() => {
+          axios
+            .delete(`/api/products/variations/types/${this.variation.id}`)
+            .then((response) => {
+              this.$toast.success("Variation Type deleted.", {
+                position: "top-right",
+              });
+              this.$emit("deleted", this.variation.id);
+            })
+            .catch((error) => {
+              console.log(error);
+              this.$toast.error("Error deleting variation type.", {
+                position: "top-right",
+              });
+            });
+        })
+        .catch(() => {
+          // Do nothing
         });
     },
   },

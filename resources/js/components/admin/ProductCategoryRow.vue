@@ -23,7 +23,7 @@
       <span>{{ category.name }}</span>
     </td>
     <td>
-      <button class="btn btn-warning" @click="toggleEdit">
+      <button class="btn btn-tertiary" @click="toggleEdit">
         <i class="bi bi-pencil"></i>
       </button>
     </td>

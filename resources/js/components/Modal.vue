@@ -2,7 +2,7 @@
   <transition name="fade">
     <div class="modal-container" v-if="open">
       <div class="background" @click="toggle"></div>
-      <div class="modal-body bg-body">
+      <div :class="['modal-body', 'bg-body', size]">
         <slot></slot>
       </div>
     </div>
@@ -16,6 +16,10 @@ export default {
     open: {
       type: Boolean,
       required: true,
+    },
+    size: {
+      type: String,
+      default: "auto",
     },
   },
   emits: ["toggle"],
@@ -41,7 +45,7 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000;
+  /* z-index: 1000; */
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
@@ -53,9 +57,22 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1001;
-  width: 90vw;
+  /* z-index: 1001; */
   border-radius: 10px;
+}
+
+.auto {
+  width: auto;
+}
+
+@media screen and (max-width: 500px) {
+  .auto {
+    width: 90vw;
+  }
+}
+
+.full {
+  width: 90vw;
 }
 
 .fade-enter-active,

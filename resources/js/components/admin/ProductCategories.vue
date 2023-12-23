@@ -69,7 +69,6 @@ export default {
   props: {
     categories: {
       type: Array,
-      required: true,
     },
   },
   components: {

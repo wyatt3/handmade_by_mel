@@ -12,6 +12,7 @@ import Listings from './components/Listings.vue';
 import ProductPage from './components/ProductPage.vue';
 
 //admin components
+import ConfirmModal from './components/admin/ConfirmModal.vue';
 import ProductList from './components/admin/ProductList.vue';
 
 const app = createApp();
@@ -25,5 +26,6 @@ app
     .component('listings', Listings)
     .component('product-page', ProductPage)
     //admin components
+    .component('confirm-modal', ConfirmModal)
     .component('product-list', ProductList)
     .mount('#app');
