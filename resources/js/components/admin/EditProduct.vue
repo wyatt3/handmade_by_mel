@@ -122,7 +122,10 @@
                     </button>
                   </span>
                   <span class="half">
-                    <button class="btn btn-danger">
+                    <button
+                      class="btn btn-danger"
+                      @click="deleteVariation(variation.id)"
+                    >
                       <i class="bi bi-trash"></i>
                     </button>
                   </span>
@@ -187,6 +190,30 @@ export default {
     },
     endDrag() {
       this.drag = false;
+    },
+    deleteVariation(variationId) {
+      this.$root.$refs.confirm
+        .show({
+          title: "Confirm Delete",
+          message: `Are you sure you want to delete this variation?`,
+          okButton: "Delete",
+        })
+        .then(() => {
+          axios
+            .delete(`/api/products/variations/${variationId}`)
+            .then((response) => {
+              this.$toast.success("Variation deleted.", {
+                position: "top-right",
+              });
+              this.$emit("variation-deleted", variationId);
+            })
+            .catch((error) => {
+              console.log(error);
+              this.$toast.error("Error deleting variation.", {
+                position: "top-right",
+              });
+            });
+        });
     },
   },
   computed: {
