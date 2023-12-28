@@ -2,22 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Products\ProductVariation;
 use App\Models\Products\ProductVariationType;
 use Illuminate\Http\Request;
 
 class ProductVariationController extends Controller
 {
-    /**
-     * index
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function index(): \Illuminate\Http\JsonResponse
-    {
-        $types = ProductVariationType::orderBy('name')->get();
-        return response()->json($types);
-    }
-
     /**
      * store
      *
@@ -27,10 +17,10 @@ class ProductVariationController extends Controller
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
-            'name' => 'required|unique:product_variation_types,name'
+            'name' => 'required|unique:product_variations,name'
         ]);
 
-        $type = ProductVariationType::create([
+        $type = ProductVariation::create([
             'name' => $request->name
         ]);
 
@@ -41,31 +31,47 @@ class ProductVariationController extends Controller
      * update
      *
      * @param Request $request
-     * @param ProductVariationType $type
+     * @param ProductVariation $variation
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, ProductVariationType $type): \Illuminate\Http\JsonResponse
+    public function update(Request $request, ProductVariation $variation): \Illuminate\Http\JsonResponse
     {
         $request->validate([
-            'name' => 'required|unique:product_variation_types,name'
+            'name' => 'required|unique:product_variations,name'
         ]);
 
-        $type->update([
+        $variation->update([
             'name' => $request->name
         ]);
 
-        return response()->json($type);
+        return response()->json($variation);
     }
 
     /**
      * destroy
      *
-     * @param ProductVariationType $type
+     * @param ProductVariation $variation
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProductVariationType $type): \Illuminate\Http\Response
+    public function destroy(ProductVariation $variation): \Illuminate\Http\Response
     {
-        $type->delete();
+        $variation->delete();
         return response()->noContent();
+    }
+
+    /**
+     * updateActiveStatus
+     *
+     * @param Request $request
+     * @param ProductVariation $variation
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateActiveStatus(Request $request, ProductVariation $variation): \Illuminate\Http\JsonResponse
+    {
+        $variation->update([
+            'active' => $request->active
+        ]);
+
+        return response()->json($variation);
     }
 }

@@ -99,40 +99,12 @@
                 @start="drag = true"
                 @end="endDrag"
               >
-                <div
-                  class="variation-table-row d-flex align-items-center"
+                <product-variation-row
                   v-for="variation in variations"
                   :key="variation.id"
-                >
-                  <span class="full">{{ variation.name }}</span>
-                  <span class="full">${{ variation.price_modifier }}</span>
-                  <span class="full">
-                    <img
-                      :src="variation.image"
-                      alt="variation image"
-                      style="max-width: 100px"
-                    />
-                  </span>
-                  <span class="half">
-                    <toggle-switch v-model="variation.active" />
-                  </span>
-                  <span class="half">
-                    <button class="btn btn-tertiary">
-                      <i class="bi bi-pencil"></i>
-                    </button>
-                  </span>
-                  <span class="half">
-                    <button
-                      class="btn btn-danger"
-                      @click="deleteVariation(variation.id)"
-                    >
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </span>
-                  <span class="variation-handle half">
-                    <i class="bi bi-grip-vertical"></i>
-                  </span>
-                </div>
+                  :variation="variation"
+                  @variation-deleted="removeVariation(variation.id, typeName)"
+                ></product-variation-row>
               </draggable>
             </div>
           </div>
@@ -145,12 +117,12 @@
 <script>
 import { VueDraggableNext } from "vue-draggable-next";
 import { HollowDotsSpinner } from "epic-spinners";
-import ToggleSwitch from "../ToggleSwitch.vue";
+import ProductVariationRow from "./ProductVariationRow.vue";
 export default {
   components: {
     draggable: VueDraggableNext,
     HollowDotsSpinner,
-    ToggleSwitch,
+    ProductVariationRow,
   },
   props: {
     product: {
@@ -188,32 +160,13 @@ export default {
           });
         });
     },
+    removeVariation(variationId, typeName) {
+      this.product.groupedVariations[typeName] = this.product.groupedVariations[
+        typeName
+      ].filter((variation) => variation.id !== variationId);
+    },
     endDrag() {
       this.drag = false;
-    },
-    deleteVariation(variationId) {
-      this.$root.$refs.confirm
-        .show({
-          title: "Confirm Delete",
-          message: `Are you sure you want to delete this variation?`,
-          okButton: "Delete",
-        })
-        .then(() => {
-          axios
-            .delete(`/api/products/variations/${variationId}`)
-            .then((response) => {
-              this.$toast.success("Variation deleted.", {
-                position: "top-right",
-              });
-              this.$emit("variation-deleted", variationId);
-            })
-            .catch((error) => {
-              console.log(error);
-              this.$toast.error("Error deleting variation.", {
-                position: "top-right",
-              });
-            });
-        });
     },
   },
   computed: {
@@ -239,39 +192,5 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-}
-
-.variation-handle {
-  cursor: ns-resize;
-}
-
-.variation-handle i {
-  font-size: 1.3rem;
-}
-
-.variation-table-header {
-  font-weight: bold;
-  border-bottom: 1px solid #ccc;
-  padding: 0.5rem 0;
-}
-
-.variation-table-row {
-  border-bottom: 1px solid #ccc;
-  padding: 0.25rem 0;
-}
-
-.variation-table-header span.full,
-.variation-table-row span.full {
-  flex: 1;
-}
-
-.variation-table-header span.half,
-.variation-table-row span.half {
-  flex: 0.5;
-}
-
-.variation-table-header span.half:last-child,
-.variation-table-row span.half:last-child {
-  text-align: right;
 }
 </style>

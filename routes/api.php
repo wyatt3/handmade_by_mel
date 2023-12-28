@@ -38,10 +38,10 @@ Route::domain('admin.' . env('APP_URL'))->middleware('auth:sanctum')->group(func
                 Route::put('/{type}', [ProductVariationTypeController::class, 'update']);
                 Route::delete('/{type}', [ProductVariationTypeController::class, 'destroy']);
             });
-            Route::get('/', [ProductVariationController::class, 'getVariations']);
-            Route::post('/', [ProductVariationController::class, 'storeVariation']);
-            Route::put('/{variation}', [ProductVariationController::class, 'updateVariation']);
-            Route::delete('/{variation}', [ProductVariationController::class, 'destroyVariation']);
+            Route::post('/', [ProductVariationController::class, 'store']);
+            Route::put('/{variation}', [ProductVariationController::class, 'update']);
+            Route::put('/{variation}/active', [ProductVariationController::class, 'updateActiveStatus']);
+            Route::delete('/{variation}', [ProductVariationController::class, 'destroy']);
         });
         Route::get('/', [ProductController::class, 'getProducts']);
         Route::put('/{product}/active', [ProductController::class, 'updateActiveStatus']);

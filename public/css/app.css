@@ -11998,3 +11998,37 @@ body {
 .modal-open {
   overflow: hidden;
 }
+
+.variation-handle {
+  cursor: ns-resize;
+}
+
+.variation-handle i {
+  font-size: 1.3rem;
+}
+
+.variation-table-header {
+  font-weight: bold;
+  border-bottom: 1px solid #ccc;
+  padding: 0.5rem 0;
+}
+
+.variation-table-row {
+  border-bottom: 1px solid #ccc;
+  padding: 0.25rem 0;
+}
+
+.variation-table-header span.full,
+.variation-table-row span.full {
+  flex: 1;
+}
+
+.variation-table-header span.half,
+.variation-table-row span.half {
+  flex: 0.5;
+}
+
+.variation-table-header span.half:last-child,
+.variation-table-row span.half:last-child {
+  text-align: right;
+}

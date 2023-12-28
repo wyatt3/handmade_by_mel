@@ -67,7 +67,7 @@
             <toggle-switch
               v-model="product.active"
               @change="updateProductActive(product.id, product.active)"
-            ></toggle-switch>
+            />
           </td>
         </tr>
       </tbody>
