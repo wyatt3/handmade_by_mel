@@ -8,9 +8,11 @@
     </span>
     <span class="full">
       <img
+        v-if="variation.image"
         :src="variation.image"
         alt="variation image"
         style="max-width: 100px"
+        @click="clickUploadButton"
       />
     </span>
     <span class="half">

@@ -164,6 +164,9 @@ export default {
       this.product.groupedVariations[typeName] = this.product.groupedVariations[
         typeName
       ].filter((variation) => variation.id !== variationId);
+      if (this.product.groupedVariations[typeName].length === 0) {
+        delete this.product.groupedVariations[typeName];
+      }
     },
     endDrag(variations) {
       this.drag = false;
