@@ -86,7 +86,7 @@
             <div class="variation-table-header d-flex">
               <span class="full">Name</span>
               <span class="full">Price Modifier</span>
-              <span class="full">Image</span>
+              <span class="full">Image (Click to Replace)</span>
               <span class="half">Active</span>
               <span class="half">Edit</span>
               <span class="half">Delete</span>
@@ -97,7 +97,7 @@
                 v-model="product.groupedVariations[typeName]"
                 :options="dragOptions"
                 @start="drag = true"
-                @end="endDrag"
+                @end="endDrag(product.groupedVariations[typeName])"
               >
                 <product-variation-row
                   v-for="variation in variations"
@@ -165,8 +165,20 @@ export default {
         typeName
       ].filter((variation) => variation.id !== variationId);
     },
-    endDrag() {
+    endDrag(variations) {
       this.drag = false;
+      variations.forEach((variation, index) => {
+        axios
+          .put(`/api/products/variations/${variation.id}/order`, {
+            order: index,
+          })
+          .catch((error) => {
+            console.log(error);
+            this.$toast.error("There was an error updating the variation", {
+              position: "top-right",
+            });
+          });
+      });
     },
   },
   computed: {

@@ -1,6 +1,40 @@
 <template>
-  <div class="variation-table-row d-flex align-items-center"></div>
-  <div class="variation-table-row d-flex align-items-center">
+  <div v-if="editing" class="variation-table-row d-flex align-items-center">
+    <span class="full input">
+      <input class="form-control" v-model="variation.name" />
+    </span>
+    <span class="full input">
+      <input class="form-control" v-model="variation.price_modifier" />
+    </span>
+    <span class="full">
+      <img
+        :src="variation.image"
+        alt="variation image"
+        style="max-width: 100px"
+      />
+    </span>
+    <span class="half">
+      <toggle-switch
+        v-model="variation.active"
+        @change="updateVariationActive"
+      />
+    </span>
+    <span class="half">
+      <button class="btn btn-primary" @click="updateVariation">
+        {{ variation.order }}
+        <i class="bi bi-check"></i>
+      </button>
+    </span>
+    <span class="half">
+      <button class="btn btn-danger" @click="toggleEdit">
+        <i class="bi bi-x"></i>
+      </button>
+    </span>
+    <span class="variation-handle half">
+      <i class="bi bi-grip-vertical"></i>
+    </span>
+  </div>
+  <div v-else class="variation-table-row d-flex align-items-center">
     <span class="full">{{ variation.name }}</span>
     <span class="full">${{ variation.price_modifier }}</span>
     <span class="full">
@@ -13,7 +47,7 @@
     <span class="half">
       <toggle-switch
         v-model="variation.active"
-        @change="updateVariationActive(variation.id, variation.active)"
+        @change="updateVariationActive"
       />
     </span>
     <span class="half">
@@ -22,7 +56,7 @@
       </button>
     </span>
     <span class="half">
-      <button class="btn btn-danger" @click="deleteVariation(variation.id)">
+      <button class="btn btn-danger" @click="deleteVariation">
         <i class="bi bi-trash"></i>
       </button>
     </span>
@@ -47,13 +81,44 @@ export default {
   data() {
     return {
       editing: false,
+      originalName: "",
+      originalPrice: 0,
     };
   },
   methods: {
-    updateVariationActive(variationId, active) {
+    toggleEdit() {
+      this.editing = !this.editing;
+      if (!this.editing) {
+        this.variation.name = this.originalName;
+        this.variation.price_modifier = this.originalPrice;
+      } else {
+        this.originalName = this.variation.name;
+        this.originalPrice = this.variation.price_modifier;
+      }
+    },
+    updateVariation() {
       axios
-        .put(`/api/products/variations/${variationId}/active`, {
-          active: active,
+        .put(`/api/products/variations/${this.variation.id}`, {
+          name: this.variation.name,
+          price_modifier: this.variation.price_modifier,
+        })
+        .then((response) => {
+          this.editing = false;
+          this.$toast.success("Variation updated.", {
+            position: "top-right",
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$toast.error("Error updating variation.", {
+            position: "top-right",
+          });
+        });
+    },
+    updateVariationActive() {
+      axios
+        .put(`/api/products/variations/${this.variation.id}/active`, {
+          active: this.variation.active,
         })
         .catch((error) => {
           console.log(error);
@@ -62,7 +127,7 @@ export default {
           });
         });
     },
-    deleteVariation(variationId) {
+    deleteVariation() {
       this.$root.$refs.confirm
         .show({
           title: "Confirm Delete",
@@ -71,12 +136,12 @@ export default {
         })
         .then(() => {
           axios
-            .delete(`/api/products/variations/${variationId}`)
+            .delete(`/api/products/variations/${this.variation.id}`)
             .then((response) => {
               this.$toast.success("Variation deleted.", {
                 position: "top-right",
               });
-              this.$emit("variation-deleted", variationId);
+              this.$emit("variation-deleted", this.variation.id);
             })
             .catch((error) => {
               console.log(error);
@@ -89,3 +154,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.full.input .form-control {
+  width: 93%;
+}
+</style>

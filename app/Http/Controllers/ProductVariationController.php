@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Products\ProductVariation;
-use App\Models\Products\ProductVariationType;
 use Illuminate\Http\Request;
 
 class ProductVariationController extends Controller
@@ -37,11 +36,13 @@ class ProductVariationController extends Controller
     public function update(Request $request, ProductVariation $variation): \Illuminate\Http\JsonResponse
     {
         $request->validate([
-            'name' => 'required|unique:product_variations,name'
+            'name' => 'required|unique:product_variations,id,name',
+            'price_modifier' => 'required|numeric'
         ]);
 
         $variation->update([
-            'name' => $request->name
+            'name' => $request->name,
+            'price_modifier' => $request->price_modifier
         ]);
 
         return response()->json($variation);
@@ -70,6 +71,42 @@ class ProductVariationController extends Controller
     {
         $variation->update([
             'active' => $request->active
+        ]);
+
+        return response()->json($variation);
+    }
+
+    /**
+     * updateOrder
+     *
+     * @param Request $request
+     * @param ProductVariation $variation
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateOrder(Request $request, ProductVariation $variation): \Illuminate\Http\JsonResponse
+    {
+        $variation->update([
+            'order' => $request->order
+        ]);
+
+        return response()->json($variation);
+    }
+
+    /**
+     * updateImage
+     *
+     * @param Request $request
+     * @param ProductVariation $variation
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateImage(Request $request, ProductVariation $variation): \Illuminate\Http\JsonResponse
+    {
+        $request->validate([
+            'image' => 'required|image'
+        ]);
+
+        $variation->update([
+            'image' => $request->image->store('product_variation_images', 'public')
         ]);
 
         return response()->json($variation);
