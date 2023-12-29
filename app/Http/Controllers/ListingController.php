@@ -48,7 +48,7 @@ class ListingController extends Controller
             ->where('name', $listing)
             ->firstOrFail();
 
-        $product->groupedVariations = $product->variations->groupBy('type.name')->sortKeys();
+        $product->groupedVariations = $product->variations->sortBy('order')->groupBy('type.name')->sortKeys();
 
         /** @var Collection<Product> $related */
         $related = $product->category->products()

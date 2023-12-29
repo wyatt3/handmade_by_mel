@@ -74,13 +74,13 @@
             </option>
           </select>
         </div>
-        <h4>Product Variations</h4>
+        <h4 class="mb-3">Product Variations</h4>
         <div
-          class="col-12 mb-2"
+          class="col-12 mb-4"
           v-for="(variations, typeName) in product.groupedVariations"
           :key="typeName"
         >
-          <label>{{ typeName }}</label>
+          <h5 class="mb-0">{{ typeName }}</h5>
 
           <div class="variation-table">
             <div class="variation-table-header d-flex">

@@ -21,7 +21,6 @@
     </span>
     <span class="half">
       <button class="btn btn-primary" @click="updateVariation">
-        {{ variation.order }}
         <i class="bi bi-check"></i>
       </button>
     </span>
