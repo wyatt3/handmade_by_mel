@@ -109,6 +109,23 @@
             </div>
           </div>
         </div>
+        <div class="col-12 mb-4">
+          <label>Add a New Variation</label>
+          <div class="d-flex">
+            <div>
+              <label>Type</label>
+              <select class="form-control">
+                <option
+                  v-for="type in variationTypes"
+                  :key="type.id"
+                  :value="type.id"
+                >
+                  {{ type.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
