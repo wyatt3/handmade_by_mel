@@ -1,69 +1,87 @@
 <template>
-  <div v-if="editing" class="variation-table-row d-flex align-items-center">
-    <span class="full input">
-      <input class="form-control" v-model="variation.name" />
-    </span>
-    <span class="full input">
-      <input class="form-control" v-model="variation.price_modifier" />
-    </span>
-    <span class="full">
-      <img
-        v-if="variation.image"
-        :src="variation.image"
-        alt="variation image"
-        style="max-width: 100px"
-        @click="clickUploadButton"
-      />
-    </span>
-    <span class="half">
-      <toggle-switch
-        v-model="variation.active"
-        @change="updateVariationActive"
-      />
-    </span>
-    <span class="half">
-      <button class="btn btn-primary" @click="updateVariation">
-        <i class="bi bi-check"></i>
-      </button>
-    </span>
-    <span class="half">
-      <button class="btn btn-danger" @click="toggleEdit">
-        <i class="bi bi-x"></i>
-      </button>
-    </span>
-    <span class="variation-handle half">
-      <i class="bi bi-grip-vertical"></i>
-    </span>
-  </div>
-  <div v-else class="variation-table-row d-flex align-items-center">
-    <span class="full">{{ variation.name }}</span>
-    <span class="full">${{ variation.price_modifier }}</span>
-    <span class="full">
-      <img
-        :src="variation.image"
-        alt="variation image"
-        style="max-width: 100px"
-      />
-    </span>
-    <span class="half">
-      <toggle-switch
-        v-model="variation.active"
-        @change="updateVariationActive"
-      />
-    </span>
-    <span class="half">
-      <button class="btn btn-tertiary" @click="toggleEdit">
-        <i class="bi bi-pencil"></i>
-      </button>
-    </span>
-    <span class="half">
-      <button class="btn btn-danger" @click="deleteVariation">
-        <i class="bi bi-trash"></i>
-      </button>
-    </span>
-    <span class="variation-handle half">
-      <i class="bi bi-grip-vertical"></i>
-    </span>
+  <div>
+    <input
+      type="file"
+      ref="image"
+      style="display: none"
+      @change="uploadImage"
+    />
+    <div v-if="editing" class="variation-table-row d-flex align-items-center">
+      <span class="full input">
+        <input class="form-control" v-model="variation.name" />
+      </span>
+      <span class="full input">
+        <input class="form-control" v-model="variation.price_modifier" />
+      </span>
+      <span class="full">
+        <img
+          v-if="variation.image"
+          :src="variation.image"
+          alt="variation image"
+          style="max-width: 100px"
+          @click="clickUploadButton"
+          class="upload-button"
+        />
+        <button v-else class="btn btn-primary" @click="clickUploadButton">
+          <i class="bi bi-upload"></i>
+        </button>
+      </span>
+      <span class="half">
+        <toggle-switch
+          v-model="variation.active"
+          @change="updateVariationActive"
+        />
+      </span>
+      <span class="half">
+        <button class="btn btn-primary" @click="updateVariation">
+          <i class="bi bi-check"></i>
+        </button>
+      </span>
+      <span class="half">
+        <button class="btn btn-danger" @click="toggleEdit">
+          <i class="bi bi-x"></i>
+        </button>
+      </span>
+      <span class="variation-handle half">
+        <i class="bi bi-grip-vertical"></i>
+      </span>
+    </div>
+    <div v-else class="variation-table-row d-flex align-items-center">
+      <span class="full">{{ variation.name }}</span>
+      <span class="full">${{ variation.price_modifier }}</span>
+      <span class="full">
+        <img
+          v-if="variation.image"
+          :src="variation.image"
+          alt="variation image"
+          style="max-width: 100px"
+          @click="clickUploadButton"
+          class="upload-button"
+        />
+        <button v-else class="btn btn-primary" @click="clickUploadButton">
+          <i class="bi bi-upload"></i>
+        </button>
+      </span>
+      <span class="half">
+        <toggle-switch
+          v-model="variation.active"
+          @change="updateVariationActive"
+        />
+      </span>
+      <span class="half">
+        <button class="btn btn-tertiary" @click="toggleEdit">
+          <i class="bi bi-pencil"></i>
+        </button>
+      </span>
+      <span class="half">
+        <button class="btn btn-danger" @click="deleteVariation">
+          <i class="bi bi-trash"></i>
+        </button>
+      </span>
+      <span class="variation-handle half">
+        <i class="bi bi-grip-vertical"></i>
+      </span>
+    </div>
   </div>
 </template>
 
@@ -87,6 +105,27 @@ export default {
     };
   },
   methods: {
+    clickUploadButton() {
+      this.$refs.image.click();
+    },
+    uploadImage() {
+      const formData = new FormData();
+      formData.append("image", this.$refs.image.files[0]);
+      axios
+        .post(`/api/products/variations/${this.variation.id}/image`, formData)
+        .then((response) => {
+          this.$toast.success("Image uploaded.", {
+            position: "top-right",
+          });
+          this.variation.image = response.data.image;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$toast.error("Error uploading image.", {
+            position: "top-right",
+          });
+        });
+    },
     toggleEdit() {
       this.editing = !this.editing;
       if (!this.editing) {
@@ -159,5 +198,9 @@ export default {
 <style scoped>
 .full.input .form-control {
   width: 93%;
+}
+
+.upload-button {
+  cursor: pointer;
 }
 </style>

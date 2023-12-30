@@ -106,7 +106,7 @@ class ProductVariationController extends Controller
         ]);
 
         $variation->update([
-            'image' => $request->image->store('product_variation_images', 'public')
+            'image' => "/storage/" . $request->image->store('product_variation_images', 'public')
         ]);
 
         return response()->json($variation);
