@@ -110,11 +110,14 @@
           </div>
         </div>
         <div class="col-12 mb-4">
-          <label>Add a New Variation</label>
-          <div class="d-flex">
-            <div>
+          <h3>Add a New Variation</h3>
+          <div class="row">
+            <div class="col-12 col-md-4 mb-2">
               <label>Type</label>
-              <select class="form-control">
+              <select class="form-control" v-model="newVariationTypeId">
+                <option value="0" selected disabled hidden>
+                  -- Select a type --
+                </option>
                 <option
                   v-for="type in variationTypes"
                   :key="type.id"
@@ -123,6 +126,40 @@
                   {{ type.name }}
                 </option>
               </select>
+            </div>
+            <div class="col-12 col-md-4 mb-2">
+              <label>Name</label>
+              <input
+                type="text"
+                class="form-control"
+                v-model="newName"
+                placeholder="Name"
+              />
+            </div>
+            <div class="col-12 col-md-3 mb-2">
+              <label>Price Modifier</label>
+              <div class="input-group">
+                <div class="input-group-text">$</div>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Price Modifier"
+                  v-model="newPriceModifier"
+                />
+              </div>
+            </div>
+            <div class="col-12 col-md-1 mb-2 d-flex flex-column-reverse">
+              <button
+                class="btn btn-primary"
+                :disabled="
+                  newVariationTypeId == null ||
+                  newPriceModifier.length <= 0 ||
+                  newName <= 0
+                "
+                @click="addVariation"
+              >
+                <i class="bi bi-plus"></i>
+              </button>
             </div>
           </div>
         </div>
@@ -158,6 +195,9 @@ export default {
   data() {
     return {
       drag: false,
+      newVariationTypeId: 0,
+      newName: "",
+      newPriceModifier: "",
     };
   },
   methods: {
@@ -173,6 +213,32 @@ export default {
         .catch((error) => {
           console.log(error);
           this.$toast.error("There was an error updating the product", {
+            position: "top-right",
+          });
+        });
+    },
+    addVariation() {
+      axios
+        .post(`/api/products/variations`, {
+          name: this.newName,
+          price_modifier: this.newPriceModifier,
+          product_id: this.product.id,
+          product_variation_type_id: this.newVariationTypeId,
+        })
+        .then((response) => {
+          this.$toast.success("Variation added successfully", {
+            position: "top-right",
+          });
+          this.product.groupedVariations[
+            response.data.product_variation_type.name
+          ].push(response.data);
+          this.newVariationTypeId = 0;
+          this.newName = "";
+          this.newPriceModifier = "";
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$toast.error("There was an error adding the variation", {
             position: "top-right",
           });
         });

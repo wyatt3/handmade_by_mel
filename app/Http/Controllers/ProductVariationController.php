@@ -16,11 +16,22 @@ class ProductVariationController extends Controller
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
-            'name' => 'required|unique:product_variations,name'
+            'name' => 'required|unique:product_variations,name,product_variation_type_id',
+            'product_id' => 'required|exists:products,id',
+            'product_variation_type_id' => 'required|exists:product_variation_types,id'
         ]);
 
+        $max = ProductVariation::where('product_id', $request->product_id)
+            ->where('product_variation_type_id', $request->product_variation_type_id)
+            ->max('order') + 1;
+
         $type = ProductVariation::create([
-            'name' => $request->name
+            'name' => $request->name,
+            'price_modifier' => $request->price_modifier ?? 0,
+            'active' => true,
+            'order' => $max,
+            'product_id' => $request->product_id,
+            'product_variation_type_id' => $request->product_variation_type_id
         ]);
 
         return response()->json($type);
