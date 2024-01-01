@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Products\ProductVariation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class ProductVariationController extends Controller
 {
@@ -16,7 +18,12 @@ class ProductVariationController extends Controller
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
-            'name' => 'required|unique:product_variations,name,product_variation_type_id',
+            'name' => [
+                'required',
+                Rule::unique('product_variations', 'name')
+                    ->where('product_variation_type_id', $request->input('product_variation_type_id'))
+                    ->where('product_id', $request->input('product_id'))
+            ],
             'product_id' => 'required|exists:products,id',
             'product_variation_type_id' => 'required|exists:product_variation_types,id'
         ]);
@@ -121,5 +128,22 @@ class ProductVariationController extends Controller
         ]);
 
         return response()->json($variation);
+    }
+
+    /**
+     * deleteImage
+     *
+     * @param ProductVariation $variation
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteImage(ProductVariation $variation): \Illuminate\Http\Response
+    {
+        Storage::disk('public')->delete(str_replace('/storage/', '', $variation->image));
+
+        $variation->update([
+            'image' => null
+        ]);
+
+        return response()->noContent();
     }
 }

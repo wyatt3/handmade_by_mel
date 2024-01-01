@@ -14,16 +14,20 @@
         <input class="form-control" v-model="variation.price_modifier" />
       </span>
       <span class="full">
-        <img
-          v-if="variation.image"
-          :src="variation.image"
-          alt="variation image"
-          style="max-width: 100px"
-          @click="clickUploadButton"
-          class="upload-button"
-        />
+        <div class="position-relative" v-if="variation.image">
+          <img
+            :src="variation.image"
+            alt="variation image"
+            style="max-width: 100px"
+            @click="clickUploadButton"
+            class="upload-button"
+          />
+          <button class="btn btn-danger circle" @click="removeImage">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
         <button v-else class="btn btn-primary" @click="clickUploadButton">
-          <i class="bi bi-upload"></i>
+          <i class="bi bi-upload"></i> Upload Image
         </button>
       </span>
       <span class="half">
@@ -50,16 +54,23 @@
       <span class="full">{{ variation.name }}</span>
       <span class="full">${{ variation.price_modifier }}</span>
       <span class="full">
-        <img
-          v-if="variation.image"
-          :src="variation.image"
-          alt="variation image"
-          style="max-width: 100px"
-          @click="clickUploadButton"
-          class="upload-button"
-        />
+        <div class="position-relative" v-if="variation.image">
+          <img
+            :src="variation.image"
+            alt="variation image"
+            style="max-width: 100px"
+            @click="clickUploadButton"
+            class="upload-button"
+          />
+          <button
+            class="btn btn-danger circle"
+            @click="removeImage(variation.id)"
+          >
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
         <button v-else class="btn btn-primary" @click="clickUploadButton">
-          <i class="bi bi-upload"></i>
+          <i class="bi bi-upload"></i> Upload Image
         </button>
       </span>
       <span class="half">
@@ -122,6 +133,22 @@ export default {
         .catch((error) => {
           console.log(error);
           this.$toast.error("Error uploading image.", {
+            position: "top-right",
+          });
+        });
+    },
+    removeImage() {
+      axios
+        .delete(`/api/products/variations/${this.variation.id}/image`)
+        .then((response) => {
+          this.$toast.success("Image removed.", {
+            position: "top-right",
+          });
+          this.variation.image = null;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$toast.error("Error removing image.", {
             position: "top-right",
           });
         });
@@ -202,5 +229,21 @@ export default {
 
 .upload-button {
   cursor: pointer;
+}
+
+.circle {
+  border-radius: 100px;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  position: absolute;
+  top: -3px;
+  left: -8px;
+}
+
+.circle i {
+  position: absolute;
+  top: -1px;
+  left: 2px;
 }
 </style>

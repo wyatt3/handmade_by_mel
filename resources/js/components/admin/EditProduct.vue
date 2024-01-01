@@ -230,7 +230,9 @@ export default {
             position: "top-right",
           });
           this.product.groupedVariations[
-            response.data.product_variation_type.name
+            this.variationTypes.find(
+              (type) => type.id === this.newVariationTypeId
+            ).name
           ].push(response.data);
           this.newVariationTypeId = 0;
           this.newName = "";

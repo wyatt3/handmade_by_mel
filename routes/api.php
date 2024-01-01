@@ -43,6 +43,7 @@ Route::domain('admin.' . env('APP_URL'))->middleware('auth:sanctum')->group(func
             Route::put('/{variation}/active', [ProductVariationController::class, 'updateActiveStatus']);
             Route::put('/{variation}/order', [ProductVariationController::class, 'updateOrder']);
             Route::post('/{variation}/image', [ProductVariationController::class, 'updateImage']);
+            Route::delete('/{variation}/image', [ProductVariationController::class, 'deleteImage']);
             Route::delete('/{variation}', [ProductVariationController::class, 'destroy']);
         });
         Route::get('/', [ProductController::class, 'getProducts']);
