@@ -23,6 +23,7 @@ class ProductSeeder extends Seeder
         foreach ($categories as $category) {
             for ($i = 0; $i < 6; $i++) {
                 Product::factory()
+                    ->withImages()
                     ->for($category, 'category')
                     ->has(
                         ProductVariation::factory()->count(3)->for($type1, 'type'),

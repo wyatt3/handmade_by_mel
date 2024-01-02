@@ -19,13 +19,18 @@ class Product extends Model
         'product_category_id',
     ];
 
-    public function variations()
-    {
-        return $this->hasMany(ProductVariation::class);
-    }
-
     public function category()
     {
         return $this->belongsTo(ProductCategory::class, 'product_category_id');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class);
+    }
+
+    public function variations()
+    {
+        return $this->hasMany(ProductVariation::class);
     }
 }

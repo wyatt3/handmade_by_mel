@@ -3,6 +3,7 @@
 namespace Database\Factories\Products;
 
 use App\Models\Products\ProductCategory;
+use App\Models\Products\ProductImage;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -27,5 +28,18 @@ class ProductFactory extends Factory
             'active' => $this->faker->boolean(75),
             'product_category_id' => ProductCategory::factory(),
         ];
+    }
+
+    /**
+     * Indicate that the product should have images.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function withImages(): Factory
+    {
+        return $this->has(
+            ProductImage::factory()->count(3),
+            'images'
+        );
     }
 }
