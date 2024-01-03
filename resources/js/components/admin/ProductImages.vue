@@ -91,8 +91,9 @@ export default {
       for (let i = 0; i < files.length; i++) {
         formData.append("images[]", files[i]);
       }
+      formData.append("product_id", this.product.id);
       axios
-        .post(`/api/products/${this.product.id}/images`, formData)
+        .post(`/api/products/images`, formData)
         .then((response) => {
           this.product.sortedImages = [
             ...this.product.sortedImages,

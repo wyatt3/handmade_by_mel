@@ -93,10 +93,12 @@ class ProductController extends Controller
 
         $product = Product::find($request->input('product_id'));
 
-        dd($request->file('images'));
-        // $this->productService->storeImage($product, $request->file('images'));
+        $images = [];
+        foreach ($request->file('images') as $image) {
+            $images[] = $this->productService->storeImage($product, $image);
+        }
 
-        return response()->json();
+        return response()->json($images);
     }
 
     /**
