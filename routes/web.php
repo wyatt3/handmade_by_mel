@@ -29,7 +29,8 @@ Route::domain('admin.' . env('APP_URL'))->group(function () {
 
         Route::prefix('products')->group(function () {
             Route::get('/', [ProductController::class, 'index'])->name('products.index');
-            Route::get('/create', [ProductController::class, 'create'])->name('products.create');
+            Route::get('/create', [ProductController::class, 'create'])->name('product.create');
+            Route::post('/create', [ProductController::class, 'store'])->name('product.store');
         });
     });
 });
