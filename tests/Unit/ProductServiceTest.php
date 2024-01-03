@@ -3,7 +3,10 @@
 namespace Tests\Unit;
 
 use App\Models\Products\Product;
+use App\Models\Products\ProductImage;
 use App\Services\ProductService;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class ProductServiceTest extends TestCase
@@ -46,5 +49,54 @@ class ProductServiceTest extends TestCase
 
         $this->assertCount(2, $products);
         $this->assertEquals($firstProduct->getKey(), $products->first()->getKey());
+    }
+
+    public function testUpdateProduct()
+    {
+        $product = Product::factory()->create([
+            'name' => 'Test Product',
+        ]);
+
+        $updatedProduct = $this->productService->updateProduct($product, $product->category, 'Test Product 2', 'new sku', 'new description', 2.00, 1.00);
+
+        $this->assertEquals('Test Product 2', $updatedProduct->name);
+        $this->assertEquals('new sku', $updatedProduct->sku);
+        $this->assertEquals('new description', $updatedProduct->description);
+        $this->assertEquals(2.00, $updatedProduct->price);
+        $this->assertEquals(1.00, $updatedProduct->sale_price);
+    }
+
+    public function testStoreImage()
+    {
+        $product = Product::factory()->create();
+
+        $productImage = $this->productService->storeImage($product, UploadedFile::fake()->image('test.jpg'));
+
+        $this->assertFileExists(public_path($productImage->path));
+    }
+
+    public function testUpdateImageOrder()
+    {
+        $image = ProductImage::factory()->create();
+
+        $this->productService->updateImageOrder($image, 10);
+
+        $this->assertDatabaseHas('product_images', [
+            'id' => $image->getKey(),
+            'order' => 10,
+        ]);
+    }
+
+    public function testDeleteProductImage()
+    {
+        Storage::fake('public');
+        $image = ProductImage::factory()->create();
+
+        $this->productService->deleteImage($image);
+
+        $this->assertDatabaseMissing('product_images', [
+            'id' => $image->getKey(),
+        ]);
+        Storage::disk('public')->assertMissing($image->path);
     }
 }
