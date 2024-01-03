@@ -74,6 +74,7 @@
             </option>
           </select>
         </div>
+        <product-images :product="product" />
         <h4 class="mb-3">Product Variations</h4>
         <div
           class="col-12 mb-4"
@@ -95,6 +96,7 @@
             <div>
               <draggable
                 v-model="product.groupedVariations[typeName]"
+                handle=".variation-handle"
                 :options="dragOptions"
                 @start="drag = true"
                 @end="endDrag(product.groupedVariations[typeName])"
@@ -172,11 +174,13 @@
 import { VueDraggableNext } from "vue-draggable-next";
 import { HollowDotsSpinner } from "epic-spinners";
 import ProductVariationRow from "./ProductVariationRow.vue";
+import ProductImages from "./ProductImages.vue";
 export default {
   components: {
     draggable: VueDraggableNext,
     HollowDotsSpinner,
     ProductVariationRow,
+    ProductImages,
   },
   props: {
     product: {

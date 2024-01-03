@@ -3,7 +3,10 @@
 namespace App\Services;
 
 use App\Models\Products\Product;
+use App\Models\Products\ProductImage;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 
 class ProductService
 {
@@ -71,5 +74,53 @@ class ProductService
         ]);
 
         return $product;
+    }
+
+    /**
+     * Ingests a product and image and stores it
+     *
+     * @param Product $product
+     * @param UploadedFile $image
+     * @return ProductImage
+     */
+    public function storeImage(Product $product, UploadedFile $image): ProductImage
+    {
+        $path = '/storage/' . $image->store('products', 'public');
+
+        $productImage = ProductImage::create([
+            'product_id' => $product->id,
+            'order' => $product->images()->max('order') + 1,
+            'path' => $path
+        ]);
+
+        return $productImage;
+    }
+
+    /**
+     * Update the order of a product image
+     *
+     * @param ProductImage $image
+     * @param integer $order
+     * @return ProductImage
+     */
+    public function updateImageOrder(ProductImage $image, int $order): ProductImage
+    {
+        $image->update([
+            'order' => $order
+        ]);
+
+        return $image;
+    }
+
+    /**
+     * Delete a product image
+     *
+     * @param ProductImage $image
+     * @return void
+     */
+    public function deleteImage(ProductImage $image): void
+    {
+        Storage::disk('public')->delete(str_replace('/storage/', '', $image->path));
+        $image->delete();
     }
 }

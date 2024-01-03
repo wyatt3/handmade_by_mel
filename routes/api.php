@@ -24,6 +24,7 @@ Route::domain('admin.' . env('APP_URL'))->middleware('auth:sanctum')->group(func
     Route::prefix('orders')->group(function () {
         Route::get('/', [OrderController::class, 'index']);
     });
+
     Route::prefix('products')->group(function () {
         Route::prefix('categories')->group(function () {
             Route::get('/', [ProductCategoryController::class, 'index']);
@@ -31,6 +32,7 @@ Route::domain('admin.' . env('APP_URL'))->middleware('auth:sanctum')->group(func
             Route::put('/{category}', [ProductCategoryController::class, 'update']);
             Route::delete('/{category}', [ProductCategoryController::class, 'destroy']);
         });
+
         Route::prefix('variations')->group(function () {
             Route::prefix('types')->group(function () {
                 Route::get('/', [ProductVariationTypeController::class, 'index']);
@@ -38,6 +40,7 @@ Route::domain('admin.' . env('APP_URL'))->middleware('auth:sanctum')->group(func
                 Route::put('/{type}', [ProductVariationTypeController::class, 'update']);
                 Route::delete('/{type}', [ProductVariationTypeController::class, 'destroy']);
             });
+
             Route::post('/', [ProductVariationController::class, 'store']);
             Route::put('/{variation}', [ProductVariationController::class, 'update']);
             Route::put('/{variation}/active', [ProductVariationController::class, 'updateActiveStatus']);
@@ -46,6 +49,13 @@ Route::domain('admin.' . env('APP_URL'))->middleware('auth:sanctum')->group(func
             Route::delete('/{variation}/image', [ProductVariationController::class, 'deleteImage']);
             Route::delete('/{variation}', [ProductVariationController::class, 'destroy']);
         });
+
+        Route::prefix('images')->group(function () {
+            Route::post('/', [ProductController::class, 'storeImages']);
+            Route::put('/{image}', [ProductController::class, 'updateImageOrder']);
+            Route::delete('/{image}', [ProductController::class, 'deleteImage']);
+        });
+
         Route::get('/', [ProductController::class, 'getProducts']);
         Route::put('/{product}/active', [ProductController::class, 'updateActiveStatus']);
         Route::get('/{product}', [ProductController::class, 'show']);
