@@ -60,7 +60,8 @@ class ProductController extends Controller
      */
     public function create(): \Illuminate\Contracts\View\View
     {
-        return view('admin.products.create');
+        $categories = ProductCategory::orderBy('name')->get();
+        return view('admin.products.create', compact('categories'));
     }
 
     /**

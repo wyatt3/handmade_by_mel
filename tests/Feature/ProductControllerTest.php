@@ -4,7 +4,10 @@ namespace Tests\Feature;
 
 use App\Http\Controllers\ProductController;
 use App\Models\Products\Product;
+use App\Models\Products\ProductCategory;
+use App\Models\Products\ProductImage;
 use App\Services\ProductService;
+use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 class ProductControllerTest extends TestCase
@@ -43,14 +46,34 @@ class ProductControllerTest extends TestCase
     public function testCreate()
     {
         $this->actingAs($this->user);
-        $response = $this->get(route('products.create'));
+        $response = $this->get(route('product.create'));
 
         $response->assertStatus(200);
     }
 
+    public function testUpdate()
+    {
+        $product = Product::factory()->create();
+        $this->mock(ProductService::class, function ($mock) use ($product) {
+            $mock->shouldReceive('updateProduct')
+                ->once()
+                ->andReturn($product);
+        });
+
+        $response = app()->make(ProductController::class)->update(new \Illuminate\Http\Request([
+            'name' => 'test',
+            'sku' => 'test',
+            'description' => 'test',
+            'product_category_id' => ProductCategory::factory()->create()->getKey(),
+            'price' => 1.00,
+            'active' => true,
+        ]), $product);
+
+        $this->assertEquals(200, $response->status());
+    }
+
     public function testUpdateActiveStatus()
     {
-        $this->actingAs($this->user);
         $product = Product::factory()->create();
         $response = app()->make(ProductController::class)->updateActiveStatus(new \Illuminate\Http\Request([
             'active' => false
@@ -61,5 +84,60 @@ class ProductControllerTest extends TestCase
             'id' => $product->getKey(),
             'active' => false
         ]);
+    }
+
+    public function testStoreImages()
+    {
+        $this->mock(ProductService::class, function ($mock) {
+            $mock->shouldReceive('storeImage')
+                ->once()
+                ->andReturn(ProductImage::factory()->make());
+        });
+
+        $product = Product::factory()->create();
+        $response = app()->make(ProductController::class)->storeImages(new \Illuminate\Http\Request(
+            [
+                'product_id' => $product->getKey(),
+            ],
+            [],
+            [],
+            [],
+            [
+                'images' => [UploadedFile::fake()->image('test.jpg')],
+            ]
+        ));
+
+        $this->assertEquals(200, $response->status());
+    }
+
+    public function testUpdateImageOrder()
+    {
+        $image = ProductImage::factory()->create();
+
+        $this->mock(ProductService::class, function ($mock) use ($image) {
+            $mock->shouldReceive('updateImageOrder')
+                ->once()
+                ->andReturn($image);
+        });
+
+        $response = app()->make(ProductController::class)->updateImageOrder(new \Illuminate\Http\Request([
+            'order' => 2
+        ]), $image);
+
+        $this->assertEquals(204, $response->status());
+    }
+
+    public function testDeleteImage()
+    {
+        $image = ProductImage::factory()->create();
+
+        $this->mock(ProductService::class, function ($mock) use ($image) {
+            $mock->shouldReceive('deleteImage')
+                ->once();
+        });
+
+        $response = app()->make(ProductController::class)->deleteImage($image);
+
+        $this->assertEquals(204, $response->status());
     }
 }

@@ -64,9 +64,6 @@ class ListingController extends Controller
                 ->get());
         }
 
-        return view('listing', [
-            'product' => $product,
-            'related' => $related,
-        ]);
+        return view('listing', compact('product', 'related'));
     }
 }

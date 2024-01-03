@@ -30,7 +30,7 @@ class Controller extends BaseController
     public function adminAbout()
     {
         $contents = File::get(base_path('resources/views/partials/about.blade.php'));
-        return view('admin.about', ['contents' => $contents]);
+        return view('admin.about', compact('contents'));
     }
 
     public function adminAboutUpdate(UpdateAboutRequest $request)
