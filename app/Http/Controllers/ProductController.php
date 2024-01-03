@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Products\Product;
+use App\Models\Products\ProductCategory;
 use App\Models\Products\ProductImage;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
@@ -60,6 +61,40 @@ class ProductController extends Controller
     public function create(): \Illuminate\Contracts\View\View
     {
         return view('admin.products.create');
+    }
+
+    /**
+     * update
+     *
+     * @param Request $request
+     * @param Product $product
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request, Product $product): \Illuminate\Http\JsonResponse
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'sku' => 'required|string|unique:products,sku,' . $product->getKey(),
+            'price' => 'required|numeric',
+            'sale_price' => 'nullable|numeric',
+            'description' => 'required|string',
+            'product_category_id' => 'required|exists:product_categories,id',
+
+        ]);
+
+        $category = ProductCategory::find($request->input('product_category_id'));
+
+        $this->productService->updateProduct(
+            $product,
+            $category,
+            $request->input('name'),
+            $request->input('sku'),
+            $request->input('description'),
+            $request->input('price'),
+            $request->input('sale_price'),
+        );
+
+        return response()->json($product);
     }
 
     /**

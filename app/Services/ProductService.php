@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Products\Product;
+use App\Models\Products\ProductCategory;
 use App\Models\Products\ProductImage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
@@ -58,6 +59,20 @@ class ProductService
         }
 
         return $products->get();
+    }
+
+    public function updateProduct(Product $product, ProductCategory $category, string $name, string $sku, string $description, float $price, ?float $salePrice): Product
+    {
+        $product->update([
+            'product_category_id' => $category->id,
+            'name' => $name,
+            'sku' => $sku,
+            'description' => $description,
+            'price' => $price,
+            'sale_price' => $salePrice
+        ]);
+
+        return $product;
     }
 
     /**

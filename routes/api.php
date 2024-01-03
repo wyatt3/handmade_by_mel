@@ -59,6 +59,7 @@ Route::domain('admin.' . env('APP_URL'))->middleware('auth:sanctum')->group(func
         Route::get('/', [ProductController::class, 'getProducts']);
         Route::put('/{product}/active', [ProductController::class, 'updateActiveStatus']);
         Route::get('/{product}', [ProductController::class, 'show']);
+        Route::put('/{product}', [ProductController::class, 'update']);
     });
 });
 

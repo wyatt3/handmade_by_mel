@@ -74,6 +74,11 @@
             </option>
           </select>
         </div>
+        <div class="col-12 mb-3 d-flex flex-row-reverse">
+          <button class="btn btn-primary px-3" @click="saveProduct">
+            <i class="bi bi-download"></i> Save
+          </button>
+        </div>
         <product-images :product="product" />
         <h4 class="mb-3">Product Variations</h4>
         <div
@@ -207,7 +212,7 @@ export default {
   methods: {
     saveProduct() {
       axios
-        .put(`/api/admin/products/${this.product.id}`, this.product)
+        .put(`/api/products/${this.product.id}`, this.product)
         .then((response) => {
           this.$toast.success("Product updated successfully", {
             position: "top-right",
