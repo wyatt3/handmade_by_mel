@@ -43,6 +43,34 @@ class ProductControllerTest extends TestCase
         $this->assertEquals(200, $response->status());
     }
 
+    public function testStore()
+    {
+        $this->mock(ProductService::class, function ($mock) {
+            $mock->shouldReceive('createProduct')
+                ->once()
+                ->andReturn(Product::factory()->make());
+            $mock->shouldReceive('storeImage')
+                ->times(2)
+                ->andReturn(ProductImage::factory()->make());
+        });
+
+        $response = app()->make(ProductController::class)->store(new \Illuminate\Http\Request([
+            'name' => 'test',
+            'sku' => 'test',
+            'description' => 'test',
+            'product_category_id' => ProductCategory::factory()->create()->getKey(),
+            'price' => 1.00,
+            'active' => true,
+        ], [], [], [], [
+            'images' => [
+                UploadedFile::fake()->image('test.jpg'),
+                UploadedFile::fake()->image('test2.jpg'),
+            ],
+        ]));
+
+        $this->assertEquals(302, $response->status());
+    }
+
     public function testCreate()
     {
         $this->actingAs($this->user);

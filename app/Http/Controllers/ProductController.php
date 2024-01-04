@@ -68,9 +68,9 @@ class ProductController extends Controller
      * store
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
         $request->validate([
             'name' => 'required|string',
@@ -96,7 +96,13 @@ class ProductController extends Controller
             $category ?? null,
         );
 
-        return response()->json($product);
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $this->productService->storeImage($product, $image);
+            }
+        }
+
+        return redirect()->route('products.index');
     }
 
     /**

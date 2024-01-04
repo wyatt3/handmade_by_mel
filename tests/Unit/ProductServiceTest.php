@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Models\Products\Product;
+use App\Models\Products\ProductCategory;
 use App\Models\Products\ProductImage;
 use App\Services\ProductService;
 use Illuminate\Http\UploadedFile;
@@ -49,6 +50,23 @@ class ProductServiceTest extends TestCase
 
         $this->assertCount(2, $products);
         $this->assertEquals($firstProduct->getKey(), $products->first()->getKey());
+    }
+
+    public function testCreateProduct()
+    {
+        $category = ProductCategory::factory()->create();
+
+        $product = $this->productService->createProduct('Test', 'sku', 'description', 1.00, 2.00, $category);
+
+        $this->assertInstanceOf(Product::class, $product);
+        $this->assertDatabaseHas('products', [
+            'name' => 'Test',
+            'sku' => 'sku',
+            'description' => 'description',
+            'price' => 1.00,
+            'sale_price' => 2.00,
+            'product_category_id' => $category->getKey(),
+        ]);
     }
 
     public function testUpdateProduct()
