@@ -2,6 +2,7 @@
 
 namespace App\Models\Products;
 
+use App\Models\Orders\OrderItem;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,6 +32,6 @@ class ProductVariation extends Model
 
     public function orderItems()
     {
-        return $this->belongsToMany(OrderItemVariation::class);
+        return $this->belongsToMany(OrderItem::class);
     }
 }
