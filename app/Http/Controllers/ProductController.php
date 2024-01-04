@@ -65,6 +65,41 @@ class ProductController extends Controller
     }
 
     /**
+     * store
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'sku' => 'required|string|unique:products',
+            'price' => 'required|numeric',
+            'sale_price' => 'nullable|numeric',
+            'description' => 'required|string',
+            'product_category_id' => 'sometimes|exists:product_categories,id',
+            'images' => 'sometimes|array',
+            'images.*' => 'sometimes|image',
+        ]);
+
+        if ($request->input('product_category_id')) {
+            $category = ProductCategory::findOrFail($request->input('product_category_id'));
+        }
+
+        $product = $this->productService->createProduct(
+            $request->input('name'),
+            $request->input('sku'),
+            $request->input('description'),
+            $request->input('price'),
+            $request->input('sale_price'),
+            $category ?? null,
+        );
+
+        return response()->json($product);
+    }
+
+    /**
      * update
      *
      * @param Request $request
@@ -83,7 +118,7 @@ class ProductController extends Controller
 
         ]);
 
-        $category = ProductCategory::find($request->input('product_category_id'));
+        $category = ProductCategory::findOrFail($request->input('product_category_id'));
 
         $this->productService->updateProduct(
             $product,
@@ -127,7 +162,7 @@ class ProductController extends Controller
             'product_id' => 'required|exists:products,id',
         ]);
 
-        $product = Product::find($request->input('product_id'));
+        $product = Product::findOrFail($request->input('product_id'));
 
         $images = [];
         foreach ($request->file('images') as $image) {

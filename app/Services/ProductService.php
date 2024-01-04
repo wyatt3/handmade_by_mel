@@ -61,6 +61,31 @@ class ProductService
         return $products->get();
     }
 
+    /**
+     * Create a product
+     *
+     * @param string $name
+     * @param string $sku
+     * @param string $description
+     * @param float $price
+     * @param float|null $salePrice
+     * @param ProductCategory|null $category
+     * @return Product
+     */
+    public function createProduct(string $name, string $sku, string $description, float $price, ?float $salePrice, ?ProductCategory $category): Product
+    {
+        $product = Product::create([
+            'product_category_id' => $category->getKey() ?? null,
+            'name' => $name,
+            'sku' => $sku,
+            'description' => $description,
+            'price' => $price,
+            'sale_price' => $salePrice
+        ]);
+
+        return $product;
+    }
+
     public function updateProduct(Product $product, ProductCategory $category, string $name, string $sku, string $description, float $price, ?float $salePrice): Product
     {
         $product->update([
