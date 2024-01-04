@@ -123,6 +123,10 @@ class ProductVariationController extends Controller
             'image' => 'required|image'
         ]);
 
+        if ($variation->image) {
+            $this->deleteImage($variation);
+        }
+
         $variation->update([
             'image' => "/storage/" . $request->image->store('product_variation_images', 'public')
         ]);
