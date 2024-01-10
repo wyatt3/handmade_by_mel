@@ -76,6 +76,22 @@ export default {
   },
   methods: {
     addToCart() {
+      for (let name in this.selectedVariations) {
+        if (this.selectedVariations[name] === 0) {
+          let startsWithVowel = name.match("^[aieouAIEOU].*");
+          if (startsWithVowel) {
+            this.$toast.warning(`- Please select an ${name}`, {
+              duration: 5000,
+              position: "top-right",
+            });
+          } else {
+            this.$toast.warning(`- Please select a ${name}`, {
+              duration: 5000,
+              position: "top-right",
+            });
+          }
+        }
+      }
       this.$store.commit("addToCart", {
         product: this.product,
         variations: this.selectedVariations,
