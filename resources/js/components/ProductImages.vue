@@ -6,7 +6,7 @@
       :class="{ active: activeImage === image.path }"
       v-for="(image, index) in images"
       :key="index"
-      @click="activeImage = image.path"
+      @click="changeImage(image.path)"
       :src="image.path"
       alt="Product Thumbnail"
     />
@@ -26,6 +26,11 @@ export default {
       activeImage: null,
     };
   },
+  methods: {
+    changeImage(path) {
+      this.activeImage = path;
+    },
+  },
   mounted() {
     this.activeImage = this.images[0].path;
   },
@@ -38,8 +43,8 @@ export default {
   height: 50px;
   cursor: pointer;
   object-fit: cover;
-  border: 1px solid #555;
-  border-radius: 2px;
+  border: 2px solid #555;
+  border-radius: 3px;
 }
 
 @media screen and (min-width: 768px) {

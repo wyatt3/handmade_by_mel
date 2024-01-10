@@ -1,6 +1,8 @@
 <template>
   <div class="row gx-4 gx-lg-5 align-items-center">
-    <div class="col-md-6"><product-images :images="productImages" /></div>
+    <div class="col-md-6">
+      <product-images ref="productImages" :images="productImages" />
+    </div>
     <div class="col-md-6">
       <h1 class="display-5 fw-bolder mb-0" v-text="product.name"></h1>
       <div class="small mb-2" v-text="'SKU:' + product.sku"></div>
@@ -71,7 +73,6 @@ export default {
     this.product.variations.forEach((variation) => {
       this.selectedVariations[variation.type.name] = 0;
     });
-    console.log(this.productImages);
   },
   methods: {
     addToCart() {
@@ -90,7 +91,7 @@ export default {
         (variation) => variation.id === variationId
       );
       if (variation.image) {
-        console.log(variation.image);
+        this.$refs.productImages.changeImage(variation.image);
       }
     },
     calculatePrice() {
