@@ -1,11 +1,6 @@
 <template>
   <div class="row gx-4 gx-lg-5 align-items-center">
-    <div class="col-md-6">
-      <img
-        class="card-img-top mb-5 mb-md-0"
-        src="https://dummyimage.com/600x700/dee2e6/6c757d.jpg"
-      />
-    </div>
+    <div class="col-md-6"><product-images :images="productImages" /></div>
     <div class="col-md-6">
       <h1 class="display-5 fw-bolder mb-0" v-text="product.name"></h1>
       <div class="small mb-2" v-text="'SKU:' + product.sku"></div>
@@ -56,7 +51,9 @@
 </template>
 
 <script>
+import ProductImages from "./ProductImages.vue";
 export default {
+  components: { ProductImages },
   props: {
     product: {
       type: Object,
@@ -74,6 +71,7 @@ export default {
     this.product.variations.forEach((variation) => {
       this.selectedVariations[variation.type.name] = 0;
     });
+    console.log(this.productImages);
   },
   methods: {
     addToCart() {
@@ -118,6 +116,20 @@ export default {
       if (this.salePrice) {
         this.salePrice = this.salePrice.toFixed(2);
       }
+    },
+  },
+  computed: {
+    productImages() {
+      return [
+        ...this.product.images,
+        ...this.product.variations.map((variation) => {
+          return {
+            variation_id: variation.id,
+            order: variation.order,
+            path: variation.image,
+          };
+        }),
+      ];
     },
   },
 };

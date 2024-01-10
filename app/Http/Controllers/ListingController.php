@@ -43,7 +43,8 @@ class ListingController extends Controller
         $product = Product::with([
             'variations' => function ($query) {
                 $query->where('active', true)->orderBy('order')->with('type');
-            }
+            },
+            'images',
         ])
             ->where('name', $listing)
             ->firstOrFail();
@@ -63,6 +64,8 @@ class ListingController extends Controller
                 ->limit(4 - $related->count())
                 ->get());
         }
+
+        $related->load('images');
 
         return view('listing', compact('product', 'related'));
     }

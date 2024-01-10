@@ -12,7 +12,11 @@
       <a :href="'/' + product.name">
         <img
           class="card-img-top"
-          src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+          :src="
+            product.images.length > 0
+              ? product.images[0]?.path
+              : '/storage/products/no-image.jpg'
+          "
           alt="..."
         />
       </a>

@@ -58,7 +58,7 @@ class ProductService
             $products->limit($limit);
         }
 
-        return $products->get();
+        return $products->with('images')->get();
     }
 
     /**
