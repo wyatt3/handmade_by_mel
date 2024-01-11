@@ -22,21 +22,12 @@
         :key="variationType"
       >
         <label class="form-label mb-0 ps-2" v-text="variationType"></label>
-        <select
-          class="form-select mb-3"
-          v-model="selectedVariations[variationType]"
-          @change="variationSelected(selectedVariations[variationType])"
-        >
-          <option value="0" selected disabled hidden>
-            -- Select a {{ variationType }} --
-          </option>
-          <option
-            v-for="variation in variations"
-            :key="variation.id"
-            v-text="variation.name"
-            :value="variation.id"
-          ></option>
-        </select>
+        <variation-select
+          class="mb-3"
+          :options="variations"
+          :default="`-- Select a ${variationType} --`"
+          @change="variationSelected($event, variationType)"
+        ></variation-select>
       </div>
       <div class="d-flex">
         <button
@@ -54,8 +45,9 @@
 
 <script>
 import ProductImages from "./ProductImages.vue";
+import VariationSelect from "./VariationSelect.vue";
 export default {
-  components: { ProductImages },
+  components: { ProductImages, VariationSelect },
   props: {
     product: {
       type: Object,
@@ -101,11 +93,9 @@ export default {
           : parseFloat(this.price),
       });
     },
-    variationSelected(variationId) {
+    variationSelected(variation, variationType) {
+      this.selectedVariations[variationType] = variation.id;
       this.calculatePrice();
-      let variation = this.product.variations.find(
-        (variation) => variation.id === variationId
-      );
       if (variation.image) {
         this.$refs.productImages.changeImage(variation.image);
       }
