@@ -94,7 +94,7 @@ export default {
       });
     },
     variationSelected(variation, variationType) {
-      this.selectedVariations[variationType] = variation.id;
+      this.selectedVariations[variationType] = variation;
       this.calculatePrice();
       if (variation.image) {
         this.$refs.productImages.changeImage(variation.image);
