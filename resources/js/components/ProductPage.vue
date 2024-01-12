@@ -31,13 +31,11 @@
       </div>
       <div class="d-flex">
         <button
-          class="btn btn-outline-dark flex-shrink-0"
+          class="btn btn-outline-dark flex-shrink-0 position-relative add-to-cart"
           type="button"
           @click="addToCart"
-        >
-          <i class="bi-cart-fill me-1"></i>
-          Add to cart
-        </button>
+          v-html="addToCartText"
+        ></button>
       </div>
     </div>
   </div>
@@ -59,6 +57,7 @@ export default {
       price: this.product.price,
       salePrice: this.product.sale_price,
       selectedVariations: {},
+      addToCartText: `<i class="bi-cart-fill me-1"></i> Add to cart`,
     };
   },
   created() {
@@ -68,8 +67,10 @@ export default {
   },
   methods: {
     addToCart() {
+      let complete = true;
       for (let name in this.selectedVariations) {
         if (this.selectedVariations[name] === 0) {
+          complete = false;
           let startsWithVowel = name.match("^[aieouAIEOU].*");
           if (startsWithVowel) {
             this.$toast.warning(`- Please select an ${name}`, {
@@ -84,6 +85,9 @@ export default {
           }
         }
       }
+      if (!complete) {
+        return;
+      }
       this.$store.commit("addToCart", {
         product: this.product,
         variations: this.selectedVariations,
@@ -92,6 +96,10 @@ export default {
           ? parseFloat(this.salePrice)
           : parseFloat(this.price),
       });
+      this.addToCartText = `<i class="bi-check2 me-1"></i> Added!`;
+      setTimeout(() => {
+        this.addToCartText = `<i class="bi-cart-fill me-1"></i> Add to cart`;
+      }, 2000);
     },
     variationSelected(variation, variationType) {
       this.selectedVariations[variationType] = variation;
@@ -103,11 +111,8 @@ export default {
     calculatePrice() {
       this.price = this.product.price;
       this.salePrice = this.product.sale_price ?? null;
-      for (let variationId of Object.values(this.selectedVariations)) {
-        if (variationId !== 0) {
-          let variation = this.product.variations.find(
-            (variation) => variation.id === variationId
-          );
+      for (let variation of Object.values(this.selectedVariations)) {
+        if (variation !== 0) {
           if (variation.price_modifier) {
             this.price =
               parseFloat(this.price) + parseFloat(variation.price_modifier);
