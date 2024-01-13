@@ -86,11 +86,16 @@ class ProductServiceTest extends TestCase
 
     public function testStoreImage()
     {
+        Storage::fake('public');
         $product = Product::factory()->create();
+        $file = UploadedFile::fake()->image('test.jpg');
 
-        $productImage = $this->productService->storeImage($product, UploadedFile::fake()->image('test.jpg'));
+        $productImage = $this->productService->storeImage($product, $file);
 
-        $this->assertFileExists(public_path($productImage->path));
+        $this->assertInstanceOf(ProductImage::class, $productImage);
+        $this->assertEquals($product->id, $productImage->product_id);
+
+        Storage::disk('public')->assertExists("products/{$file->hashName()}");
     }
 
     public function testUpdateImageOrder()

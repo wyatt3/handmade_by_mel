@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductVariationController;
 use App\Models\Products\Product;
 use App\Models\Products\ProductVariation;
 use App\Models\Products\ProductVariationType;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class ProductVariationControllerTest extends TestCase
@@ -96,6 +97,7 @@ class ProductVariationControllerTest extends TestCase
 
     public function testUpdateImage()
     {
+        Storage::fake('public');
         $variation = ProductVariation::factory()->create();
         $response = app()->make(ProductVariationController::class)->updateImage(new \Illuminate\Http\Request(
             [],
@@ -103,7 +105,7 @@ class ProductVariationControllerTest extends TestCase
             [],
             [],
             [
-                'image' => \Illuminate\Http\UploadedFile::fake()->image('test.jpg')
+                'image' => $file = \Illuminate\Http\UploadedFile::fake()->image('test.jpg')
             ]
         ), $variation);
 
@@ -114,6 +116,7 @@ class ProductVariationControllerTest extends TestCase
             'image' => $variation->image
         ]);
         $this->assertEquals(200, $response->status());
+        Storage::disk('public')->assertExists("product_variation_images/{$file->hashName()}");
     }
 
     public function testDeleteImage()
