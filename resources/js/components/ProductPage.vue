@@ -30,12 +30,19 @@
         ></variation-select>
       </div>
       <div class="d-flex">
-        <button
-          class="btn btn-outline-dark flex-shrink-0 position-relative add-to-cart"
-          type="button"
-          @click="addToCart"
-          v-html="addToCartText"
-        ></button>
+        <div class="postition-absolute">
+          <transition name="fade">
+            <button
+              v-if="
+                addToCartText == `<i class='bi-cart-fill me-1'></i> Add to cart`
+              "
+              class="btn btn-outline-dark flex-shrink-0 position-relative add-to-cart"
+              type="button"
+              @click="addToCart"
+              v-html="addToCartText"
+            ></button>
+          </transition>
+        </div>
       </div>
     </div>
   </div>
@@ -57,7 +64,7 @@ export default {
       price: this.product.price,
       salePrice: this.product.sale_price,
       selectedVariations: {},
-      addToCartText: `<i class="bi-cart-fill me-1"></i> Add to cart`,
+      addToCartText: `<i class='bi-cart-fill me-1'></i> Add to cart`,
     };
   },
   created() {
@@ -98,7 +105,7 @@ export default {
       });
       this.addToCartText = `<i class="bi-check2 me-1"></i> Added!`;
       setTimeout(() => {
-        this.addToCartText = `<i class="bi-cart-fill me-1"></i> Add to cart`;
+        this.addToCartText = `<i class='bi-cart-fill me-1'></i> Add to cart`;
       }, 2000);
     },
     variationSelected(variation, variationType) {
