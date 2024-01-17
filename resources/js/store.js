@@ -1,9 +1,9 @@
 
 import { createStore } from 'vuex'
 
-let cart = window.sessionStorage.getItem('cart');
-let count = window.sessionStorage.getItem('count');
-let subTotal = window.sessionStorage.getItem('subTotal');
+let cart = window.localStorage.getItem('cart');
+let count = window.localStorage.getItem('count');
+let subTotal = window.localStorage.getItem('subTotal');
 
 export const store = createStore({
     state() {
@@ -34,12 +34,12 @@ export const store = createStore({
                 item.subTotal = item.unit_price * item.quantity;
                 state.subTotal += item.subTotal;
             });
-            window.sessionStorage.setItem('subTotal', state.subTotal);
+            window.localStorage.setItem('subTotal', state.subTotal);
         },
         saveCart(state) {
             this.commit('updateSubTotal');
-            window.sessionStorage.setItem('cart', JSON.stringify(state.cart));
-            window.sessionStorage.setItem('count', state.count);
+            window.localStorage.setItem('cart', JSON.stringify(state.cart));
+            window.localStorage.setItem('count', state.count);
         },
         resetCart(state) {
             state.cart = [];

@@ -29,21 +29,21 @@
           @change="variationSelected($event, variationType)"
         ></variation-select>
       </div>
-      <div class="d-flex">
-        <div class="postition-absolute">
-          <transition name="fade">
-            <button
-              v-if="
-                addToCartText == `<i class='bi-cart-fill me-1'></i> Add to cart`
-              "
-              class="btn btn-outline-dark flex-shrink-0 position-relative add-to-cart"
-              type="button"
-              @click="addToCart"
-              v-html="addToCartText"
-            ></button>
-          </transition>
-        </div>
-      </div>
+      <button
+        class="btn btn-outline-dark add-to-cart position-relative"
+        type="button"
+        :disabled="adding"
+        @click="addToCart"
+      >
+        <transition-group name="fade">
+          <span v-if="adding" class="position-absolute">
+            <i class="bi-check2 me-1"></i> Added!
+          </span>
+          <span v-else class="position-absolute">
+            <i class="bi-cart-fill me-1"></i> Add to cart
+          </span>
+        </transition-group>
+      </button>
     </div>
   </div>
 </template>
@@ -64,7 +64,7 @@ export default {
       price: this.product.price,
       salePrice: this.product.sale_price,
       selectedVariations: {},
-      addToCartText: `<i class='bi-cart-fill me-1'></i> Add to cart`,
+      adding: false,
     };
   },
   created() {
@@ -103,9 +103,9 @@ export default {
           ? parseFloat(this.salePrice)
           : parseFloat(this.price),
       });
-      this.addToCartText = `<i class="bi-check2 me-1"></i> Added!`;
+      this.adding = true;
       setTimeout(() => {
-        this.addToCartText = `<i class='bi-cart-fill me-1'></i> Add to cart`;
+        this.adding = false;
       }, 2000);
     },
     variationSelected(variation, variationType) {
@@ -155,4 +155,15 @@ export default {
 </script>
 
 <style scoped>
+.add-to-cart {
+  width: 145px;
+  height: 45px;
+}
+
+.add-to-cart span {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 145px;
+}
 </style>
