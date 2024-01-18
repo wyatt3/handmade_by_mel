@@ -44,8 +44,31 @@ class CreateOrderRequest extends FormRequest
             'billing_address.postal_code' => ['required', 'string'],
 
             'items' => ['required', 'array'],
-            'items.*.id' => ['required', 'exists:products,id'],
             'items.*.quantity' => ['required', 'min:1'],
+            'items.*.product.id' => ['required', 'exists:products,id', function ($attribute, $productId, $fail) {
+
+                $index = str_replace('.product.id', '', str_replace('items.', '', $attribute));
+                $variations = request()->input("items.$index.variations.*.product_id");
+
+                foreach ($variations as $variation) {
+                    if ($variation !== $productId) {
+                        $fail('Product variation does not match product.');
+                    }
+                }
+            }],
+            'items.*.variations' => ['nullable', 'array'],
+            'items.*.variations.*.id' => ['required', 'exists:product_variations,id'],
+            'items.*.variations.*.product_id' => ['required', 'exists:products,id',],
+
         ];
+    }
+
+    public function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        $response = response()->json([
+            'errors' => 'An error occurred while processing your order. Please try again.'
+        ], 422);
+
+        throw new \Illuminate\Validation\ValidationException($validator, $response);
     }
 }

@@ -64,6 +64,11 @@
           <span class="fw-bold">Tax:</span>
           <span>(Calculated at Checkout)</span>
         </div>
+        <div>
+          <button @click="submit" class="btn btn-primary btn-block mt-3">
+            Proceed to Checkout
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -89,6 +94,8 @@ export default {
         index: index,
         quantity: item.quantity - 1,
       });
+    },
+    submit() {
     },
   },
 };
