@@ -31,5 +31,7 @@ class OrderController extends Controller
                 'postal_code' => $validated['billing_address']['postal_code'],
             ],
         );
+
+        $order = $this->orderService->createOrder($customer, $validated['items']);
     }
 }

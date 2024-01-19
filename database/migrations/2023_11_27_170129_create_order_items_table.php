@@ -16,7 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->integer('quantity');
             $table->decimal('base_price', 10, 2);
-            $table->decimal('total', 10, 2);
+            $table->decimal('total', 10, 2)->nullable();
             $table->bigInteger('order_id')->unsigned();
             $table->foreign('order_id')->references('id')->on('orders')->cascadeOnDelete();
             $table->bigInteger('product_id')->unsigned();

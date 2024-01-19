@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->decimal('total', 10, 2);
+            $table->decimal('total', 10, 2)->nullable();
             $table->bigInteger('status_id')->unsigned();
             $table->foreign('status_id')->references('id')->on('order_statuses');
             $table->bigInteger('customer_id')->unsigned();
