@@ -64,4 +64,4 @@ Route::domain('admin.' . env('APP_URL'))->middleware('auth:sanctum')->group(func
 });
 
 Route::get('/listings', [ListingController::class, 'getActiveListings']);
-Route::post('/orders/complete', [OrderController::class, 'store']);
+Route::post('/orders', [OrderController::class, 'store']);

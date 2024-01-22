@@ -33,5 +33,7 @@ class OrderController extends Controller
         );
 
         $order = $this->orderService->createOrder($customer, $validated['items']);
+
+        return response()->json($order, 201);
     }
 }

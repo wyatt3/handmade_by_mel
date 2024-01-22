@@ -48,7 +48,7 @@ class CreateOrderRequest extends FormRequest
             'items.*.product.id' => ['required', 'exists:products,id', function ($attribute, $productId, $fail) {
 
                 $index = str_replace('.product.id', '', str_replace('items.', '', $attribute));
-                $variations = request()->input("items.$index.variations.*.product_id");
+                $variations = request()->input("items.$index.variations.*.product_id") ?? [];
 
                 foreach ($variations as $variation) {
                     if ($variation !== $productId) {
