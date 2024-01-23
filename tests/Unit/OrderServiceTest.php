@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Mail\NewOrder;
 use App\Mail\OrderConfirmation;
 use App\Mail\ShipmentNotification;
 use App\Models\Orders\Customer;
@@ -69,6 +70,9 @@ class OrderServiceTest extends TestCase
             'base_price' => $product->sale_price ?? $product->price,
         ]);
 
+        Mail::assertSent(NewOrder::class, function ($mail) use ($order) {
+            return $mail->order->getKey() === $order->getKey();
+        });
         Mail::assertSent(OrderConfirmation::class, function ($mail) use ($order) {
             return $mail->order->getKey() === $order->getKey();
         });

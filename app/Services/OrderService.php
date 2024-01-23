@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Mail\NewOrder;
 use App\Mail\OrderConfirmation;
 use App\Mail\ShipmentNotification;
 use App\Models\Orders\Customer;
@@ -35,6 +36,8 @@ class OrderService
             }
         }
         $this->recalculateTotals($order);
+        Mail::to(env('ADMIN_EMAIL'))
+            ->send(new NewOrder($order));
         Mail::to($order->customer->email)
             ->send(new OrderConfirmation($order));
         return $order->fresh();
