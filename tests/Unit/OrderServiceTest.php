@@ -6,6 +6,7 @@ use App\Models\Orders\Customer;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderItem;
 use App\Models\Orders\OrderStatus;
+use App\Models\Orders\Shipment;
 use App\Models\Products\Product;
 use App\Models\Products\ProductVariation;
 use App\Services\OrderService;
@@ -87,5 +88,27 @@ class OrderServiceTest extends TestCase
                 'total' => 20,
             ]);
         }
+    }
+
+    public function testMarkShipped()
+    {
+        $order = Order::factory()->create();
+        $shippedStatus = OrderStatus::factory()->create();
+        config(['orders.statuses.shipped' => $shippedStatus->getKey()]);
+
+        $carrier = $this->faker->company();
+        $trackingNumber = $this->faker->uuid();
+
+        $shipment = $this->orderService->markShipped($order, $carrier, $trackingNumber);
+
+        $this->assertDatabaseHas(Order::class, [
+            'id' => $order->getKey(),
+            'status_id' => $shippedStatus->getKey(),
+        ]);
+
+        $this->assertInstanceOf(Shipment::class, $shipment);
+        $this->assertEquals($carrier, $shipment->carrier);
+        $this->assertEquals($trackingNumber, $shipment->tracking_number);
+        $this->assertEquals($order->getKey(), $shipment->order_id);
     }
 }

@@ -29,4 +29,9 @@ class Order extends Model
     {
         return $this->belongsTo(Customer::class);
     }
+
+    public function shipments()
+    {
+        return $this->hasMany(Shipment::class);
+    }
 }

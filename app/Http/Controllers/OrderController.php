@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateOrderRequest;
 use App\Models\Orders\Customer;
+use App\Models\Orders\Order;
+use App\Models\Orders\OrderStatus;
 use App\Services\OrderService;
+use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
@@ -35,5 +38,17 @@ class OrderController extends Controller
         $order = $this->orderService->createOrder($customer, $validated['items']);
 
         return response()->json($order, 201);
+    }
+
+    public function markShipped(Order $order, Request $request)
+    {
+        $validated = $request->validate([
+            'carrier' => 'required|string',
+            'tracking_number' => 'required|string',
+        ]);
+
+        $this->orderService->markShipped($order, $validated['carrier'], $validated['tracking_number']);
+
+        return response()->json($order, 200);
     }
 }

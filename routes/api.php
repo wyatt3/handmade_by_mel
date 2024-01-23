@@ -64,4 +64,8 @@ Route::domain('admin.' . env('APP_URL'))->middleware('auth:sanctum')->group(func
 });
 
 Route::get('/listings', [ListingController::class, 'getActiveListings']);
-Route::post('/orders', [OrderController::class, 'store']);
+Route::prefix('/orders')->group(function () {
+    Route::post('/', [OrderController::class, 'store']);
+    Route::get('/{order}', [OrderController::class, 'show']);
+    Route::post('/{order}/shipped', [OrderController::class, 'markShipped']);
+});

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Orders\Customer;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderStatus;
+use App\Models\Orders\Shipment;
 use App\Models\Products\Product;
 
 class OrderService
@@ -34,6 +35,12 @@ class OrderService
         return $order->fresh();
     }
 
+    /**
+     * recalculate order and order item totals
+     *
+     * @param Order $order
+     * @return void
+     */
     public function recalculateTotals(Order $order): void
     {
         $total = 0;
@@ -45,6 +52,27 @@ class OrderService
         }
         $order->update([
             'total' => $total,
+        ]);
+    }
+
+    /**
+     * Mark order as shipped
+     *
+     * @param Order $order
+     * @param string $carrier
+     * @param string $trackingNumber
+     * @return Shipment
+     */
+    public function markShipped(Order $order, string $carrier, string $trackingNumber): Shipment
+    {
+        $order->update([
+            'status_id' => OrderStatus::findOrFail(config('orders.statuses.shipped'))->getKey(),
+        ]);
+
+        return $order->shipments()->create([
+            'carrier' => $carrier,
+            'tracking_number' => $trackingNumber,
+            'shipment_date' => now(),
         ]);
     }
 }

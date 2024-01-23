@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Orders\Order;
+use App\Models\Orders\Shipment;
 use App\Models\Products\Product;
 use App\Models\Products\ProductVariation;
 use App\Services\OrderService;
@@ -105,5 +106,19 @@ class OrderControllerTest extends TestCase
         ]);
 
         $response->assertStatus(422);
+    }
+
+    public function testMarkShipped()
+    {
+        $this->orderService->shouldReceive('markShipped')->once()->andReturn(Shipment::factory()->make());
+
+        $order = Order::factory()->create();
+
+        $response = $this->postJson("/api/orders/{$order->getKey()}/shipped", [
+            'carrier' => $this->faker->company(),
+            'tracking_number' => $this->faker->uuid(),
+        ]);
+
+        $response->assertSuccessful();
     }
 }
