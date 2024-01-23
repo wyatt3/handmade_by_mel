@@ -2,11 +2,14 @@
 
 namespace App\Services;
 
+use App\Mail\OrderConfirmation;
+use App\Mail\ShipmentNotification;
 use App\Models\Orders\Customer;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderStatus;
 use App\Models\Orders\Shipment;
 use App\Models\Products\Product;
+use Illuminate\Support\Facades\Mail;
 
 class OrderService
 {
@@ -32,6 +35,8 @@ class OrderService
             }
         }
         $this->recalculateTotals($order);
+        Mail::to($order->customer->email)
+            ->send(new OrderConfirmation($order));
         return $order->fresh();
     }
 
@@ -68,11 +73,15 @@ class OrderService
         $order->update([
             'status_id' => OrderStatus::findOrFail(config('orders.statuses.shipped'))->getKey(),
         ]);
-
-        return $order->shipments()->create([
+        $shipment = $order->shipments()->create([
             'carrier' => $carrier,
             'tracking_number' => $trackingNumber,
             'shipment_date' => now(),
         ]);
+
+        Mail::to($shipment->order->customer->email)
+            ->send(new ShipmentNotification($shipment));
+
+        return $shipment;
     }
 }

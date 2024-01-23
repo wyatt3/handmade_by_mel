@@ -26,6 +26,7 @@
     </include>
     <exclude>
         <directory suffix=".php">./app/Models</directory>
+        <directory suffix=".php">./app/Mail</directory>
         <file>./app/Console/Kernel.php</file>
     </exclude>
   </source>

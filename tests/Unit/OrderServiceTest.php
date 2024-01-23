@@ -2,6 +2,8 @@
 
 namespace Tests\Unit;
 
+use App\Mail\OrderConfirmation;
+use App\Mail\ShipmentNotification;
 use App\Models\Orders\Customer;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderItem;
@@ -10,6 +12,7 @@ use App\Models\Orders\Shipment;
 use App\Models\Products\Product;
 use App\Models\Products\ProductVariation;
 use App\Services\OrderService;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class OrderServiceTest extends TestCase
@@ -25,6 +28,7 @@ class OrderServiceTest extends TestCase
 
     public function testItCreatesAnOrder()
     {
+        Mail::fake();
         $this->orderService->shouldReceive('recalculateTotals')->once();
 
         config([
@@ -64,6 +68,10 @@ class OrderServiceTest extends TestCase
             'quantity' => $items[0]['quantity'],
             'base_price' => $product->sale_price ?? $product->price,
         ]);
+
+        Mail::assertSent(OrderConfirmation::class, function ($mail) use ($order) {
+            return $mail->order->getKey() === $order->getKey();
+        });
     }
 
     public function testItRecalculatesTotals()
@@ -92,6 +100,7 @@ class OrderServiceTest extends TestCase
 
     public function testMarkShipped()
     {
+        Mail::fake();
         $order = Order::factory()->create();
         $shippedStatus = OrderStatus::factory()->create();
         config(['orders.statuses.shipped' => $shippedStatus->getKey()]);
@@ -110,5 +119,9 @@ class OrderServiceTest extends TestCase
         $this->assertEquals($carrier, $shipment->carrier);
         $this->assertEquals($trackingNumber, $shipment->tracking_number);
         $this->assertEquals($order->getKey(), $shipment->order_id);
+
+        Mail::assertSent(ShipmentNotification::class, function ($mail) use ($shipment) {
+            return $mail->shipment->getKey() === $shipment->getKey();
+        });
     }
 }
