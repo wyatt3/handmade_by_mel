@@ -23,6 +23,10 @@ use Illuminate\Support\Facades\Route;
 Route::domain('admin.' . env('APP_URL'))->middleware('auth:sanctum')->group(function () {
     Route::prefix('orders')->group(function () {
         Route::get('/', [OrderController::class, 'index']);
+        Route::get('/{order}', [OrderController::class, 'show']);
+        Route::post('/{order}/shipped', [OrderController::class, 'markShipped']);
+        Route::post('/{order}/complete', [OrderController::class, 'markCompleted']);
+        Route::post('/{order}/cancel', [OrderController::class, 'cancelOrder']);
     });
 
     Route::prefix('products')->group(function () {
@@ -64,8 +68,4 @@ Route::domain('admin.' . env('APP_URL'))->middleware('auth:sanctum')->group(func
 });
 
 Route::get('/listings', [ListingController::class, 'getActiveListings']);
-Route::prefix('/orders')->group(function () {
-    Route::post('/', [OrderController::class, 'store']);
-    Route::get('/{order}', [OrderController::class, 'show']);
-    Route::post('/{order}/shipped', [OrderController::class, 'markShipped']);
-});
+Route::post('/orders', [OrderController::class, 'store']);

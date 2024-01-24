@@ -16,7 +16,13 @@ class OrderController extends Controller
     ) {
     }
 
-    public function store(CreateOrderRequest $request)
+    /**
+     * create order
+     *
+     * @param CreateOrderRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store(CreateOrderRequest $request): \Illuminate\Http\JsonResponse
     {
         $validated = $request->validated();
         $customer = Customer::updateOrCreate(
@@ -40,7 +46,14 @@ class OrderController extends Controller
         return response()->json($order, 201);
     }
 
-    public function markShipped(Order $order, Request $request)
+    /**
+     * mark order as shipped
+     *
+     * @param Order $order
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function markShipped(Order $order, Request $request): \Illuminate\Http\JsonResponse
     {
         $validated = $request->validate([
             'carrier' => 'required|string',
@@ -48,6 +61,32 @@ class OrderController extends Controller
         ]);
 
         $this->orderService->markShipped($order, $validated['carrier'], $validated['tracking_number']);
+
+        return response()->json($order, 200);
+    }
+
+    /**
+     * mark order as completed
+     *
+     * @param Order $order
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function markCompleted(Order $order): \Illuminate\Http\JsonResponse
+    {
+        $this->orderService->markCompleted($order);
+
+        return response()->json($order, 200);
+    }
+
+    /**
+     * cancel order
+     *
+     * @param Order $order
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function cancelOrder(Order $order): \Illuminate\Http\JsonResponse
+    {
+        $this->orderService->cancelOrder($order);
 
         return response()->json($order, 200);
     }

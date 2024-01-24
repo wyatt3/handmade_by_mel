@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Http\Controllers\OrderController;
 use App\Models\Orders\Order;
 use App\Models\Orders\Shipment;
 use App\Models\Products\Product;
@@ -114,11 +115,33 @@ class OrderControllerTest extends TestCase
 
         $order = Order::factory()->create();
 
-        $response = $this->postJson("/api/orders/{$order->getKey()}/shipped", [
+        $response = app()->make(OrderController::class)->markShipped($order, new \Illuminate\Http\Request([
             'carrier' => $this->faker->company(),
             'tracking_number' => $this->faker->uuid(),
-        ]);
+        ]));
 
-        $response->assertSuccessful();
+        $this->assertEquals(200, $response->status());
+    }
+
+    public function testMarkCompleted()
+    {
+        $this->orderService->shouldReceive('markCompleted')->once()->andReturn(Order::factory()->make());
+
+        $order = Order::factory()->create();
+
+        $response = app()->make(OrderController::class)->markCompleted($order);
+
+        $this->assertEquals(200, $response->status());
+    }
+
+    public function testCancelOrder()
+    {
+        $this->orderService->shouldReceive('cancelOrder')->once()->andReturn(Order::factory()->make());
+
+        $order = Order::factory()->create();
+
+        $response = app()->make(OrderController::class)->cancelOrder($order);
+
+        $this->assertEquals(200, $response->status());
     }
 }

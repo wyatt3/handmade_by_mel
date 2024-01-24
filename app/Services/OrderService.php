@@ -87,4 +87,32 @@ class OrderService
 
         return $shipment;
     }
+
+    /**
+     * Mark order as completed
+     *
+     * @param Order $order
+     * @return Order
+     */
+    public function markCompleted(Order $order): Order
+    {
+        $order->update([
+            'status_id' => OrderStatus::findOrFail(config('orders.statuses.completed'))->getKey(),
+        ]);
+        return $order->fresh();
+    }
+
+    /**
+     * Cancel order
+     *
+     * @param Order $order
+     * @return Order
+     */
+    public function cancelOrder(Order $order): Order
+    {
+        $order->update([
+            'status_id' => OrderStatus::findOrFail(config('orders.statuses.cancelled'))->getKey(),
+        ]);
+        return $order->fresh();
+    }
 }

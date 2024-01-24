@@ -128,4 +128,32 @@ class OrderServiceTest extends TestCase
             return $mail->shipment->getKey() === $shipment->getKey();
         });
     }
+
+    public function testMarkCompleted()
+    {
+        $order = Order::factory()->create();
+        $completedStatus = OrderStatus::factory()->create();
+        config(['orders.statuses.completed' => $completedStatus->getKey()]);
+
+        $order = $this->orderService->markCompleted($order);
+
+        $this->assertDatabaseHas(Order::class, [
+            'id' => $order->getKey(),
+            'status_id' => $completedStatus->getKey(),
+        ]);
+    }
+
+    public function testCancelOrder()
+    {
+        $order = Order::factory()->create();
+        $cancelledStatus = OrderStatus::factory()->create();
+        config(['orders.statuses.cancelled' => $cancelledStatus->getKey()]);
+
+        $order = $this->orderService->cancelOrder($order);
+
+        $this->assertDatabaseHas(Order::class, [
+            'id' => $order->getKey(),
+            'status_id' => $cancelledStatus->getKey(),
+        ]);
+    }
 }
