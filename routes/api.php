@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::domain('admin.' . env('APP_URL'))->middleware('auth:sanctum')->group(function () {
     Route::prefix('orders')->group(function () {
-        Route::get('/', [OrderController::class, 'index']);
+        Route::get('/', [OrderController::class, 'getOrders']);
         Route::get('/{order}', [OrderController::class, 'show']);
         Route::post('/{order}/shipped', [OrderController::class, 'markShipped']);
         Route::post('/{order}/complete', [OrderController::class, 'markCompleted']);

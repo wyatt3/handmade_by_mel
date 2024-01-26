@@ -37,11 +37,4 @@ class LoginControllerTest extends TestCase
 
         $response->assertRedirect(route('login'));
     }
-
-    public function testAdminIndex()
-    {
-        $response = $this->actingAs($this->user)->get(route('admin.home'));
-
-        $response->assertStatus(200);
-    }
 }

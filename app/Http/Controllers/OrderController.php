@@ -17,6 +17,40 @@ class OrderController extends Controller
     }
 
     /**
+     * get orders page
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function index(): \Illuminate\Contracts\View\View
+    {
+        return view('admin.orders.index');
+    }
+
+    public function getOrders(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $request->validate([
+            'status' => 'nullable|integer',
+            'offset' => 'nullable|integer',
+            'limit' => 'nullable|integer',
+        ]);
+
+        $orders = $this->orderService->getOrders(OrderStatus::find($request->input('status')), $request->input('offset'), $request->input('limit'));
+
+        return response()->json($orders, 200);
+    }
+
+    /**
+     * show order
+     *
+     * @param Order $order
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show(Order $order): \Illuminate\Http\JsonResponse
+    {
+        return response()->json($order->load(['items', 'status', 'customer', 'shipments']), 200);
+    }
+
+    /**
      * create order
      *
      * @param CreateOrderRequest $request

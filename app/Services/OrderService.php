@@ -10,16 +10,43 @@ use App\Models\Orders\Order;
 use App\Models\Orders\OrderStatus;
 use App\Models\Orders\Shipment;
 use App\Models\Products\Product;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Mail;
 
 class OrderService
 {
+    /**
+     * Get Orders
+     *
+     * @param OrderStatus|null $status
+     * @param integer|null $offset
+     * @param integer|null $limit
+     * @return Collection
+     */
+    public function getOrders(
+        ?OrderStatus $status = null,
+        ?int $offset = null,
+        ?int $limit = null
+    ): Collection {
+        $query = Order::query();
+        if ($status) {
+            $query->where('status_id', $status->getKey());
+        }
+        if ($offset) {
+            $query->offset($offset);
+        }
+        if ($limit) {
+            $query->limit($limit);
+        }
+        return $query->orderBy('created_at', 'asc')->orderBy('id', 'asc')->with('status', 'customer')->get();
+    }
+
     public function createOrder(Customer $customer, array $items): Order
     {
         // Create order
         $order = Order::create([
             'customer_id' => $customer->getKey(),
-            'status_id' => OrderStatus::findOrFail(config('orders.statuses.created'))->getKey()
+            'status_id' => OrderStatus::findOrFail(config('orders.statuses.new'))->getKey()
         ]);
         foreach ($items as $item) {
             // Create order item

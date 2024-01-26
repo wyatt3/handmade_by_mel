@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ListingController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,7 +24,7 @@ Route::domain('admin.' . env('APP_URL'))->group(function () {
     Route::post('/login', [LoginController::class, 'login']);
     Route::middleware('auth')->group(function () {
         Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-        Route::get('/', [Controller::class, 'adminIndex'])->name('admin.home');
+        Route::get('/', [OrderController::class, 'index'])->name('admin.home');
         Route::get('/about', [Controller::class, 'adminAbout'])->name('admin.about');
         Route::post('/about', [Controller::class, 'adminAboutUpdate']);
 

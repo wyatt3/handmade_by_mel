@@ -14,7 +14,7 @@ class OrderStatusSeeder extends Seeder
     {
         $statuses = [
             [
-                'name' => 'Created',
+                'name' => 'New',
             ],
             [
                 'name' => 'Shipped',

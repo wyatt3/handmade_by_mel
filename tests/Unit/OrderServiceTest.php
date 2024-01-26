@@ -27,13 +27,34 @@ class OrderServiceTest extends TestCase
         $this->orderService = $this->partialMock(OrderService::class);
     }
 
+    public function testItGetsOrders()
+    {
+        $status = OrderStatus::factory()->create();
+
+        // orders to skip with offset
+        Order::factory()
+            ->for($status, 'status')
+            ->count(5)
+            ->create();
+
+        // orders to return
+        $orders = Order::factory()
+            ->for($status, 'status')
+            ->count(10)
+            ->create();
+
+        $response = $this->orderService->getOrders($status, 5, 10);
+
+        $this->assertEquals($orders->load('status', 'customer')->toArray(), $response->toArray());
+    }
+
     public function testItCreatesAnOrder()
     {
         Mail::fake();
         $this->orderService->shouldReceive('recalculateTotals')->once();
 
         config([
-            'orders.statuses.created' => OrderStatus::factory()->create()->getKey()
+            'orders.statuses.new' => OrderStatus::factory()->create()->getKey()
         ]);
 
         $customer = Customer::factory()->create();
@@ -60,7 +81,7 @@ class OrderServiceTest extends TestCase
         $this->assertInstanceOf(Order::class, $order);
         $this->assertDatabaseHas(Order::class, [
             'customer_id' => $customer->getKey(),
-            'status_id' => OrderStatus::findOrFail(config('orders.statuses.created'))->getKey(),
+            'status_id' => OrderStatus::findOrFail(config('orders.statuses.new'))->getKey(),
         ]);
 
         $this->assertDatabaseHas('order_items', [

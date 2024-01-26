@@ -21,6 +21,32 @@ class OrderControllerTest extends TestCase
         $this->orderService = $this->mock(OrderService::class);
     }
 
+    public function testIndex()
+    {
+        $response = $this->actingAs($this->user)->get(route('admin.home'));
+
+        $response->assertStatus(200);
+    }
+
+    public function testGetOrders()
+    {
+        $this->orderService->shouldReceive('getOrders')->once()->andReturn(collect([
+            Order::factory()->make(),
+        ]));
+
+        $response = app()->make(OrderController::class)->getOrders(new \Illuminate\Http\Request());
+
+        $this->assertEquals(200, $response->status());
+    }
+
+    public function testShow()
+    {
+        $response = app()->make(OrderController::class)->show($order = Order::factory()->create());
+
+        $this->assertEquals(200, $response->status());
+        $this->assertEquals($order->getKey(), $response->getData()->id);
+    }
+
     public function testStore()
     {
         $this->orderService->shouldReceive('createOrder')->once()->andReturn(Order::factory()->make());
