@@ -15,7 +15,7 @@ class OrderSeeder extends Seeder
     public function run(): void
     {
         OrderStatus::all()->each(function (OrderStatus $status) {
-            Order::factory()->for($status, 'status')->count(10)->create();
+            Order::factory()->for($status, 'status')->withItems(2)->count(3)->create();
         });
     }
 }

@@ -6,6 +6,8 @@ use App\Models\Products\Product;
 use App\Models\Products\ProductVariation;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class OrderItem extends Model
 {
@@ -19,17 +21,17 @@ class OrderItem extends Model
         'product_id',
     ];
 
-    public function order()
+    public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
     }
 
-    public function product()
+    public function product(): BelongsTo
     {
-        return $this->hasOne(Product::class);
+        return $this->belongsTo(Product::class);
     }
 
-    public function variations()
+    public function variations(): BelongsToMany
     {
         return $this->belongsToMany(ProductVariation::class);
     }
