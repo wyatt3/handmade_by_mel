@@ -82,14 +82,25 @@
         </tbody>
       </table>
     </div>
+    <modal
+      :open="showOrderModal"
+      size="full"
+      @toggle="showOrderModal = !showOrderModal"
+    >
+      <order-details :order="selectedOrder" />
+    </modal>
   </div>
 </template>
 
 <script>
 import { HollowDotsSpinner } from "epic-spinners";
+import Modal from "../Modal.vue";
+import OrderDetails from "./OrderDetails.vue";
 export default {
   components: {
     HollowDotsSpinner,
+    Modal,
+    OrderDetails,
   },
   data() {
     return {
@@ -97,6 +108,8 @@ export default {
       loading: true,
       search: "",
       selectedStatus: null,
+      selectedOrder: null,
+      showOrderModal: false,
     };
   },
   computed: {
@@ -138,6 +151,21 @@ export default {
     setSelectedStatus(status) {
       this.selectedStatus = status;
       this.fetchOrders();
+    },
+    openOrderModal(orderId) {
+      this.selectedOrder = null;
+      this.showOrderModal = true;
+      axios
+        .get(`/api/orders/${orderId}`)
+        .then((response) => {
+          this.selectedOrder = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$toast.error("There was an error fetching the order", {
+            position: "top-right",
+          });
+        });
     },
   },
   created() {
