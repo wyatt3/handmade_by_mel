@@ -16,13 +16,6 @@ return new class extends Migration
             $table->timestamps();
             $table->string('name');
             $table->string('email');
-            $table->string('address_line_1');
-            $table->string('address_line_2')->nullable();
-            $table->string('address_line_3')->nullable();
-            $table->string('address_line_4')->nullable();
-            $table->string('city');
-            $table->string('state');
-            $table->string('postal_code');
         });
     }
 

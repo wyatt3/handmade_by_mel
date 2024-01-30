@@ -4,6 +4,7 @@ import { createApp } from 'vue';
 import { store } from './store';
 import ToastPlugin from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-bootstrap.css';
+import { formatPrice, formatDate } from './helpers';
 
 import Cart from './components/cart/Cart.vue';
 import CartButton from './components/CartButton.vue';
@@ -17,6 +18,8 @@ import ProductList from './components/admin/ProductList.vue';
 import OrderList from './components/admin/OrderList.vue';
 
 const app = createApp();
+app.config.globalProperties.formatPrice = formatPrice;
+app.config.globalProperties.formatDate = formatDate;
 
 app
     .use(store)

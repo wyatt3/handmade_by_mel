@@ -36,12 +36,7 @@
         </button>
       </div>
       <div class="col-12 col-md-4">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Search..."
-          v-model="search"
-        />
+        <input type="text" class="form-control" placeholder="Search..." v-model="search" />
       </div>
     </div>
     <div class="overflow-x-scroll">
@@ -51,6 +46,7 @@
             <th>Order #</th>
             <th>Customer Name</th>
             <th>Customer Email</th>
+            <th>Order Total</th>
             <th>Creation Date</th>
             <th>Status</th>
           </tr>
@@ -76,17 +72,14 @@
             </td>
             <td>{{ order.customer.name }}</td>
             <td>{{ order.customer.email }}</td>
-            <td>{{ order.created_at }}</td>
+            <td>${{ formatPrice(order.total) }}</td>
+            <td>{{ formatDate(order.created_at) }}</td>
             <td>{{ order.status.name }}</td>
           </tr>
         </tbody>
       </table>
     </div>
-    <modal
-      :open="showOrderModal"
-      size="full"
-      @toggle="showOrderModal = !showOrderModal"
-    >
+    <modal :open="showOrderModal" size="full" @toggle="showOrderModal = !showOrderModal">
       <order-details :order="selectedOrder" />
     </modal>
   </div>
@@ -117,9 +110,7 @@ export default {
       return this.orders.filter((order) => {
         return (
           order.id.toString().includes(this.search) ||
-          order.customer.name
-            .toLowerCase()
-            .includes(this.search.toLowerCase()) ||
+          order.customer.name.toLowerCase().includes(this.search.toLowerCase()) ||
           order.customer.email.toLowerCase().includes(this.search.toLowerCase())
         );
       });
