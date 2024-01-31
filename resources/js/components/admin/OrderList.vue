@@ -166,4 +166,7 @@ export default {
 </script>
 
 <style scoped>
+.btn-group .btn.active {
+  z-index: 0;
+}
 </style>

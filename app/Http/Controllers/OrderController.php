@@ -49,7 +49,9 @@ class OrderController extends Controller
      */
     public function show(Order $order): \Illuminate\Http\JsonResponse
     {
-        return response()->json($order->load(['items', 'status', 'customer', 'shipments']), 200);
+        $order->load(['items', 'status', 'customer', 'shipments']);
+        $order->customer->append('shipping_address', 'billing_address');
+        return response()->json($order, 200);
     }
 
     /**
@@ -61,11 +63,11 @@ class OrderController extends Controller
     public function store(CreateOrderRequest $request): \Illuminate\Http\JsonResponse
     {
         $validated = $request->validated();
+
         $customer = Customer::firstOrCreate([
             'name' => $validated['name'],
             'email' => $validated['email'],
         ]);
-
         $this->customerService->addAddresses($customer, $validated['shipping_address'], $validated['billing_address']);
 
         $order = $this->orderService->createOrder($customer, $validated['items']);

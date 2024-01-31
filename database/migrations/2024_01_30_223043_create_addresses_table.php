@@ -18,8 +18,6 @@ return new class extends Migration
             $table->enum('address_type', ['billing', 'shipping']);
             $table->string('line_1');
             $table->string('line_2')->nullable();
-            $table->string('line_3')->nullable();
-            $table->string('line_4')->nullable();
             $table->string('city');
             $table->string('state');
             $table->string('postal_code');

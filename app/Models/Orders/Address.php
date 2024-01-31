@@ -15,8 +15,6 @@ class Address extends Model
         'address_type',
         'line_1',
         'line_2',
-        'line_3',
-        'line_4',
         'city',
         'state',
         'postal_code',

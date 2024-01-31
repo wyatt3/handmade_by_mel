@@ -23,8 +23,6 @@ class AddressFactory extends Factory
             'address_type' => $this->faker->randomElement(AddressType::cases())->value,
             'line_1' => $this->faker->streetAddress(),
             'line_2' => $this->faker->secondaryAddress(),
-            'line_3' => $this->faker->optional()->secondaryAddress(),
-            'line_4' => $this->faker->optional()->secondaryAddress(),
             'city' => $this->faker->city(),
             'state' => $this->faker->state(),
             'postal_code' => $this->faker->postcode(),
