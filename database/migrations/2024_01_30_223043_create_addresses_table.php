@@ -16,10 +16,10 @@ return new class extends Migration
             $table->timestamps();
             $table->foreignId('customer_id')->constrained();
             $table->enum('address_type', ['billing', 'shipping']);
-            $table->string('address_line_1');
-            $table->string('address_line_2')->nullable();
-            $table->string('address_line_3')->nullable();
-            $table->string('address_line_4')->nullable();
+            $table->string('line_1');
+            $table->string('line_2')->nullable();
+            $table->string('line_3')->nullable();
+            $table->string('line_4')->nullable();
             $table->string('city');
             $table->string('state');
             $table->string('postal_code');

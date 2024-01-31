@@ -6,12 +6,14 @@ use App\Http\Requests\CreateOrderRequest;
 use App\Models\Orders\Customer;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderStatus;
+use App\Services\CustomerService;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
     public function __construct(
+        public CustomerService $customerService,
         public OrderService $orderService,
     ) {
     }
@@ -59,21 +61,12 @@ class OrderController extends Controller
     public function store(CreateOrderRequest $request): \Illuminate\Http\JsonResponse
     {
         $validated = $request->validated();
-        $customer = Customer::updateOrCreate(
-            [
-                'name' => $validated['name'],
-                'email' => $validated['email'],
-            ],
-            [
-                'address_line_1' => $validated['billing_address']['line_1'],
-                'address_line_2' => $validated['billing_address']['line_2'],
-                'address_line_3' => $validated['billing_address']['line_3'],
-                'address_line_4' => $validated['billing_address']['line_4'],
-                'city' => $validated['billing_address']['city'],
-                'state' => $validated['billing_address']['state'],
-                'postal_code' => $validated['billing_address']['postal_code'],
-            ],
-        );
+        $customer = Customer::firstOrCreate([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+        ]);
+
+        $this->customerService->addAddresses($customer, $validated['shipping_address'], $validated['billing_address']);
 
         $order = $this->orderService->createOrder($customer, $validated['items']);
 

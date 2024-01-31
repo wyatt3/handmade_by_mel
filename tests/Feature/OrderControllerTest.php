@@ -7,6 +7,7 @@ use App\Models\Orders\Order;
 use App\Models\Orders\Shipment;
 use App\Models\Products\Product;
 use App\Models\Products\ProductVariation;
+use App\Services\CustomerService;
 use App\Services\OrderService;
 use Tests\TestCase;
 
@@ -49,6 +50,9 @@ class OrderControllerTest extends TestCase
 
     public function testStore()
     {
+        $this->mock(CustomerService::class, function ($mock) {
+            $mock->shouldReceive('addAddresses')->once();
+        });
         $this->orderService->shouldReceive('createOrder')->once()->andReturn(Order::factory()->make());
 
         $response = $this->postJson('/api/orders/', [

@@ -2,6 +2,7 @@
 
 namespace App\Models\Orders;
 
+use App\Enums\AddressType;
 use App\Models\Orders\Address;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -28,11 +29,11 @@ class Customer extends Model
 
     public function getShippingAddressAttribute(): Address
     {
-        return $this->addresses()->where('address_type', 'shipping')->first();
+        return $this->addresses()->where('address_type', AddressType::Shipping)->first();
     }
 
     public function getBillingAddressAttribute(): Address
     {
-        return $this->addresses()->where('address_type', 'billing')->first();
+        return $this->addresses()->where('address_type', AddressType::Billing)->first();
     }
 }
