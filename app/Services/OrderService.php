@@ -78,15 +78,20 @@ class OrderService
      */
     public function recalculateTotals(Order $order): void
     {
-        $total = 0;
+        $subtotal = 0;
         foreach ($order->items as $item) {
-            $total += $itemTotal = ($item->base_price + $item->variations->sum('price_modifier')) * $item->quantity;
+            $subtotal += $itemTotal = ($item->base_price + $item->variations->sum('price_modifier')) * $item->quantity;
             $item->update([
                 'total' => $itemTotal,
             ]);
         }
+        $shippingCost = 0; //shipping cost
+        $tax = 0; //taxes
         $order->update([
-            'total' => $total,
+            'subtotal' => $subtotal,
+            'shipping_cost' => $shippingCost,
+            'tax' => $tax,
+            'total' => $subtotal + $shippingCost + $tax,
         ]);
     }
 

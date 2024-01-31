@@ -49,7 +49,7 @@ class OrderController extends Controller
      */
     public function show(Order $order): \Illuminate\Http\JsonResponse
     {
-        $order->load(['items', 'status', 'customer', 'shipments']);
+        $order->load(['items.product', 'items.variations', 'status', 'customer', 'shipments']);
         $order->customer->append('shipping_address', 'billing_address');
         return response()->json($order, 200);
     }

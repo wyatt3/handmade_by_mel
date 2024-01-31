@@ -13,7 +13,7 @@ class Order extends Model
 
     protected $fillable = [
         'subtotal',
-        'shipping',
+        'shipping_cost',
         'tax',
         'total',
         'status_id',

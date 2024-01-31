@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->decimal('total', 10, 2)->nullable();
+            $table->decimal('subtotal', 8, 2)->nullable();
+            $table->decimal('shipping_cost', 8, 2)->nullable();
+            $table->decimal('tax', 8, 2)->nullable();
             $table->bigInteger('status_id')->unsigned();
             $table->foreign('status_id')->references('id')->on('order_statuses');
             $table->bigInteger('customer_id')->unsigned();

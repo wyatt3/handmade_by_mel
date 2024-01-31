@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\AddressType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignId('customer_id')->constrained();
-            $table->enum('address_type', ['billing', 'shipping']);
+            $table->enum('address_type', [AddressType::Billing->value, AddressType::Shipping->value]);
             $table->string('line_1');
             $table->string('line_2')->nullable();
             $table->string('city');
