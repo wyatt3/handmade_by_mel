@@ -64,15 +64,22 @@
           <tr>
             <th>Product</th>
             <th>Quantity</th>
-            <th>Price</th>
-            <th>Total</th>
+            <th>Unit Price</th>
+            <th>Item Total</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="item in order.items" :key="item.id">
             <td>{{ item.product.name }}</td>
             <td>{{ item.quantity }}</td>
-            <td>${{ formatPrice(item.base_price) }}</td>
+            <td>
+              ${{
+                formatPrice(
+                  parseFloat(item.base_price) +
+                    item.variations.reduce((prev, variation) => prev + parseFloat(variation.price_modifier), 0)
+                )
+              }}
+            </td>
             <td>${{ formatPrice(item.total) }}</td>
           </tr>
           <tr>
