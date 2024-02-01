@@ -62,6 +62,7 @@
       <table class="table table-striped">
         <thead>
           <tr>
+            <th>ID</th>
             <th>Product</th>
             <th>Quantity</th>
             <th>Unit Price</th>
@@ -70,6 +71,7 @@
         </thead>
         <tbody>
           <tr v-for="item in order.items" :key="item.id">
+            <td>#{{ item.id }}</td>
             <td>{{ item.product.name }}</td>
             <td>{{ item.quantity }}</td>
             <td>
@@ -82,9 +84,21 @@
             </td>
             <td>${{ formatPrice(item.total) }}</td>
           </tr>
-          <tr>
-            <td colspan="3" class="text-end">Subtotal</td>
+          <tr class="subtotal">
+            <td colspan="4" class="text-end">Subtotal</td>
             <td>${{ formatPrice(order.subtotal) }}</td>
+          </tr>
+          <tr v-if="order.shipping_cost > 0">
+            <td colspan="4" class="text-end">Shipping</td>
+            <td>${{ formatPrice(order.shipping_cost) }}</td>
+          </tr>
+          <tr>
+            <td colspan="4" class="text-end">Tax</td>
+            <td>${{ formatPrice(order.tax) }}</td>
+          </tr>
+          <tr class="total">
+            <td colspan="4" class="text-end">Total</td>
+            <td>${{ formatPrice(order.total) }}</td>
           </tr>
         </tbody>
       </table>
@@ -117,5 +131,10 @@ export default {
 .section-title {
   font-size: 1.25rem;
   font-weight: 600;
+}
+
+.subtotal,
+.total {
+  border-top: 2px solid #b6babe;
 }
 </style>
