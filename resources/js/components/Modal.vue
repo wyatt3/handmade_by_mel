@@ -65,9 +65,23 @@ export default {
   width: auto;
 }
 
+.md {
+  width: 40vw;
+}
+
 @media screen and (max-width: 500px) {
   .auto {
     width: 90vw;
+  }
+
+  .md {
+    width: auto;
+  }
+}
+
+@media screen and (min-width: 501px) and (max-width: 960px) {
+  .md {
+    width: 55vw;
   }
 }
 
