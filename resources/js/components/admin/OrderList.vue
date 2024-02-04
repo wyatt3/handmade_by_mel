@@ -82,6 +82,7 @@
     <modal :open="showOrderModal" size="full" @toggle="showOrderModal = !showOrderModal">
       <order-details :order="selectedOrder" />
     </modal>
+    <ship-modal ref="shipModal"></ship-modal>
   </div>
 </template>
 
@@ -89,11 +90,13 @@
 import { HollowDotsSpinner } from "epic-spinners";
 import Modal from "../Modal.vue";
 import OrderDetails from "./OrderDetails.vue";
+import ShipModal from "./ShipModal.vue";
 export default {
   components: {
     HollowDotsSpinner,
     Modal,
     OrderDetails,
+    ShipModal,
   },
   data() {
     return {

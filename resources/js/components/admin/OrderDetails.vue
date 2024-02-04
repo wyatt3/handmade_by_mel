@@ -5,16 +5,6 @@
       <hollow-dots-spinner class="m-auto" :animation-duration="1000" :dot-size="20" :dots-num="3" color="#222E50" />
     </div>
     <div v-else>
-      <div class="d-flex mb-2">
-        <button class="btn btn-secondary me-2">
-          <i class="bi bi-truck me-2"></i>
-          Ship Order
-        </button>
-        <button class="btn btn-danger me-2">
-          <i class="bi bi-trash me-2"></i>
-          Cancel Order
-        </button>
-      </div>
       <div class="row">
         <div class="col-12 col-md-4 mb-3">
           <div class="section-title">General Information</div>
@@ -22,6 +12,8 @@
           <div class="ms-2 mb-3">{{ order.customer.name }}</div>
           <label>Email:</label>
           <div class="ms-2 mb-3">{{ order.customer.email }}</div>
+          <label>Status:</label>
+          <div class="ms-2 mb-3">{{ order.status.name }}</div>
           <label>Creation Date:</label>
           <div class="ms-2 mb-3">{{ formatDate(order.created_at) }}</div>
           <label>Order Total:</label>
@@ -70,20 +62,26 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in order.items" :key="item.id">
-            <td>#{{ item.id }}</td>
-            <td>{{ item.product.name }}</td>
-            <td>{{ item.quantity }}</td>
-            <td>
-              ${{
-                formatPrice(
-                  parseFloat(item.base_price) +
-                    item.variations.reduce((prev, variation) => prev + parseFloat(variation.price_modifier), 0)
-                )
-              }}
-            </td>
-            <td>${{ formatPrice(item.total) }}</td>
-          </tr>
+          <template v-for="item in order.items" :key="item.id">
+            <tr>
+              <td>#{{ item.id }}</td>
+              <td>{{ item.product.name }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>
+                ${{
+                  formatPrice(
+                    parseFloat(item.base_price) +
+                      item.variations.reduce((prev, variation) => prev + parseFloat(variation.price_modifier), 0)
+                  )
+                }}
+              </td>
+              <td>${{ formatPrice(item.total) }}</td>
+            </tr>
+            <tr v-for="variation in item.variations" :key="variation.id">
+              <td colspan="2" class="text-end">{{ variation.type.name }}:</td>
+              <td colspan="3">{{ variation.name }}</td>
+            </tr>
+          </template>
           <tr class="subtotal">
             <td colspan="4" class="text-end">Subtotal</td>
             <td>${{ formatPrice(order.subtotal) }}</td>
@@ -102,6 +100,16 @@
           </tr>
         </tbody>
       </table>
+      <div class="d-flex justify-content-end mb-2">
+        <button class="btn btn-secondary me-2" @click="openShipModal">
+          <i class="bi bi-truck me-2"></i>
+          Mark Order Shipped
+        </button>
+        <button class="btn btn-danger me-2" @click="cancelOrder">
+          <i class="bi bi-trash me-2"></i>
+          Cancel Order
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -118,8 +126,35 @@ export default {
   components: {
     HollowDotsSpinner,
   },
-  data() {
-    return {};
+
+  methods: {
+    openShipModal() {
+      this.$parent.$parent.$parent.$refs.shipModal.open = true;
+    },
+    cancelOrder() {
+      this.$root.$refs.confirm
+        .show({
+          title: "Confirm Cancel",
+          message: `Are you sure you want to cancel this order?`,
+          okButton: "Cancel Order",
+        })
+        .then(() => {
+          axios
+            .post(`/api/orders/${this.order.id}/cancel`)
+            .then((response) => {
+              this.$toast.success("Order cancelled.", {
+                position: "top-right",
+              });
+              this.$emit("order-status-changed", this.order.id);
+            })
+            .catch((error) => {
+              console.log(error);
+              this.$toast.error("Error cancelling order.", {
+                position: "top-right",
+              });
+            });
+        });
+    },
   },
 };
 </script>
